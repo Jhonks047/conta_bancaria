@@ -185,7 +185,7 @@ def mixy_games(user_tickets, system_ticket, total_buyed_tickets):
         titulos("GANHOS DA LOTERIA MIXy")
         print(f"{'Você ganhou no total: '}{formated_money(total_prize_amount)}")
         loading(60, f"Adicionando {formated_money(total_prize_amount)} ao saldo")
-        print(main.MainBankAccount.actual_balance_str())
+        print(main.MainBankAccount().actual_balance_str())
     confirm = continue_options()
     if confirm == "S":
         mixy_lottery()
@@ -209,21 +209,21 @@ def premiacoes_mixy(qnt_num=0):
     
     #!  Acertos com 4 números.
     if qnt_num == 4:
-        update_balance(main.MainBankAccount.name, premiacao_4_acertos, "add")
+        update_balance( premiacao_4_acertos, "add")
         print(color_bright("Parabéns! Você acertou 4 números e foi premiado em","l_g"),end=" ")
         print(formated_money(premiacao_4_acertos))
         return premiacao_4_acertos
     
     #! Acertos com 5 números.
     if qnt_num == 5:
-        update_balance(main.MainBankAccount.name, premiacao_5_acertos, "add")
+        update_balance(premiacao_5_acertos, "add")
         print(color_bright("Parabéns! Você acertou 5 números e foi premiado em","g"),end=" ")
         print(formated_money(premiacao_5_acertos))
         return premiacao_5_acertos
     
     #! Acertos com 6 números
     if qnt_num == 6:
-        update_balance(main.MainBankAccount.name, premiacao_total, "add")
+        update_balance(premiacao_total, "add")
         print(color_bright("Parabéns! Você acertou todos números e foi premiado em","g"),end=" ")
         print(formated_money(premiacao_total))
         return premiacao_total

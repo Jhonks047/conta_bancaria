@@ -23,7 +23,7 @@ def main_extras_menu():
     titulos("MENU DE EXTRAS")
     print()
     print(color_bright("   ( A ) Loterias.","l_g"))
-    print(color_bright("   ( B ) ","l_y"))
+    print(color_bright("   ( B ) Investimentos  ","l_y"))
     print()
     print(color_bright("( X ) Voltar.","l_r"))
     print()

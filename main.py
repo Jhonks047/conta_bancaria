@@ -32,9 +32,9 @@ class MainBankAccount():
             name = str(input("Digite seu nome: "))
             username = gerarUser(name)
             token = gerarToken()
-            self.account = gerarNumeroConta()
+            account = gerarNumeroConta()
             loading(30, "Criando arquivo do usuário!")
-            cadastrarInformacoes(self.archive_name, username, token, self.account)
+            cadastrarInformacoes(self.archive_name, username, token, account)
             if not criarArquivo(self.money_file):
                 loading(15, "Criando arquivo de dinheiro!")
                 cadastrarMoney(self.money_file, 0)
