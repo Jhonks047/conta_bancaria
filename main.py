@@ -41,13 +41,13 @@ class MainBankAccount():
             if login_user():
                 self.menu_principal()
             else:
-                print(color_bright("Número te tentativas excedido! Fechando programa por segurança!","r"))
+                print(color("Número te tentativas excedido! Fechando programa por segurança!","red"))
         else:
             titulos("ÁREA DE LOGIN")
             if login_user():
                 self.menu_principal()
             else:
-                print(color_bright("Número te tentativas excedido! Fechando programa por segurança!","r"))
+                print(color("Número te tentativas excedido! Fechando programa por segurança!","red"))
                 
                 
     def menu_principal(self):
@@ -72,7 +72,7 @@ class MainBankAccount():
         balance_actual = lerBalance()
         balance_actual = round(balance_actual, 2)
         balance_actual_str = locale.format_string("%.2f", balance_actual, grouping=True)
-        actual_balance = color_bright("Saldo disponível: R$ ","l_g")+color_bright(balance_actual_str, "l_w")
+        actual_balance = color("Saldo disponível: R$ ","l_g")+color(balance_actual_str, "lwhite")
         return actual_balance
 
 
@@ -89,27 +89,27 @@ class MainBankAccount():
         """
         titulos("MENU DE OPÇÕES")
         print()
-        print(color_bright("   ( A ) Deposit.","l_g"))
-        print(color_bright("   ( B ) Withdraw.","l_y"))
-        print(color_bright("   ( C ) Extras.","l_m"))
+        print(color("   ( A ) Deposit.","lgreen"))
+        print(color("   ( B ) Withdraw.","lyellow"))
+        print(color("   ( C ) Extras.","lmagenta"))
         print()
-        print(color_bright("( X ) Sair do programa.","l_r"))
+        print(color("( X ) Sair do programa.","lred"))
         print()
-        option = options_menu()
+        option = choices("A", "B", "C", "X")
         
         #!  Chama a função do depósito.
-        if option in "A":
+        if option == "A":
             loading(30, "Carregando opção DEPÓSITO")
             qnt_bal = deposit()
             update_balance(qnt_bal, "add")
             loading(50, "Depositando")
-            print(color_bright("Deposito feito com sucesso!","l_g"))
+            print(color("Deposito feito com sucesso!","lgreen"))
             sleep(2)
             print(text_menu_principal())
             sleep(2)
         
         #!  Chama a função do saque.
-        elif option in "B":
+        elif option == "B":
             loading(30, "Carregando opção SAQUE")
             while True:
                 try:
@@ -119,7 +119,7 @@ class MainBankAccount():
                     else:
                         update_balance(qnt_wd, "rem")
                         loading(50, "Sacando")
-                        print(color_bright("Saque feito com sucesso!","l_g"))
+                        print(color("Saque feito com sucesso!","lgreen"))
                         sleep(2)
                         print(text_menu_principal())
                         sleep(2)
@@ -132,12 +132,12 @@ class MainBankAccount():
                     sleep(2)
         
         #!  Chama a função do menu de extras
-        elif option in "C":
+        elif option == "C":
             loading(30, "Carregando menu de extras")
             funcionalidades.extras.main_extras.main_extras_menu()
 
         #!  Sair do programa
-        elif option in "X":
+        elif option == "X":
             loading(30, "Encerrando programa...")
             titulos("PROGRAMA ENCERRADO!")
             quit()

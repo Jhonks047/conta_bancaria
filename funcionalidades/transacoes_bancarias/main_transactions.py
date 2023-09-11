@@ -30,12 +30,12 @@ def deposit():
             elif qnt_balance < 0:
                 raise ValueError(f"Você não pode depositar um valor negativo!")
         except ValueError as error:
-            print(color_bright(f"Erro: {error}","r"))
+            print(color(f"Erro: {error}","red"))
         else:
             loading(10, "Registrando depósito.")
             print(f"{'Você irá depositar: '}{formated_money(qnt_balance)}")
-            confirm = continue_options()
-            if confirm in "S":
+            confirm = options_SN("Deseja confirmar o depósito? [ S / N ]")
+            if confirm == "S":
                 break
             else:
                 loading(20, "Voltando a opção anterior.")
@@ -65,11 +65,11 @@ def withdraw():
                 raise ValueError(f"Você não pode sacar um valor negativo!")
             loading(10, "Registrando saque.")
         except ValueError as error:
-            print(color_bright(f"Erro: {error}","r"))
+            print(color(f"Erro: {error}","red"))
         else:
             print(f"{'Você irá sacar: '}{formated_money(qnt_withdraw)}")
-            confirm = continue_options()
-            if confirm in "S":
+            confirm = options_SN("Deseja confirmar o saque? [ S / N ]")
+            if confirm == "S":
                 break
             else:
                 loading(20, "Voltando a opção anterior.")

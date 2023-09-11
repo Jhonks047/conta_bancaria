@@ -12,8 +12,6 @@ import funcionalidades.extras.main_extras
 
 ###################################################################################################
 
-init(autoreset=True)
-
 
 def menu_lottery_options():
     """Menu principal de loterias
@@ -21,13 +19,13 @@ def menu_lottery_options():
     """
     titulos("MENU DAS LOTERIAS")
     print()
-    print(color_bright("   ( A ) MIXy.","l_m"))
+    print(color("   ( A ) MIXy.","lmagenta"))
     print()
-    print(color_bright("( X ) Voltar.","l_r"))
+    print(color("( X ) Voltar.","lred"))
     print()
-    option = options_lottery()
-    if option in "A":
+    option = choices("A", "X")
+    if option == "A":
         funcionalidades.extras.loterias.mixy_lottery.main_mixy.mixy_lottery()
-    elif option in "X":
+    elif option == "X":
         loading(20, "Voltando...")
         funcionalidades.extras.main_extras.main_extras_menu()

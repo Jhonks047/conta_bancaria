@@ -4,7 +4,7 @@ from colorama import Fore, Style, init
 
 ###################################################################################################
 
-from config_program.config import color_bright
+from config_program.config import color
 
 init(autoreset=True)
 
@@ -18,13 +18,13 @@ def titulos(msg):
     width = 60
     print()
     print("=-" * 30)
-    print(color_bright(f"{msg.center(width)}","m"))
+    print(color(f"{msg.center(width)}","magenta"))
     print("=-" * 30)
 
 
 def text_menu_principal():
-    return f"{Fore.LIGHTYELLOW_EX + Style.BRIGHT}{'Voltando ao menu principal!'}"
+    return f"{color('Voltando ao menu principal!', 'lyellow')}"
 
 
 def insufficient_balance():
-    return f"{Fore.RED + Style.BRIGHT}{'Saldo insuficiente!'}"
+    return f"{color('Saldo insuficiente!', 'lred')}"
