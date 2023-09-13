@@ -1,10 +1,11 @@
 ###################################################################################################
-
+#TODO                           Outros imports
+import requests
 from time import sleep
 
 ###################################################################################################
 
-#TODO                           imports da pasta do programa
+#TODO                           Imports da pasta do programa
 
 #?  CONFIG_PROGRAM
 from config_program.main_balance import update_balance, lerBalance
@@ -15,6 +16,23 @@ from config_program.config import *
 #?  FUNCIONALIDADES
 from funcionalidades.transacoes_bancarias.main_transactions import *
 import funcionalidades.extras.main_extras
+
+###################################################################################################
+
+#TODO                           BANCO DE DADOS
+
+db = "https://conta-bancaria-mkl-default-rtdb.firebaseio.com/.json"
+
+###################################################################################################
+
+#TODO                              COISAS A FAZER
+#TODO   | LEGENDA
+#!  | Importante *
+#?  | Otimização
+#*  | 
+
+#!  [ ] Alterar o run() para salvar os dados em um banco de dados ao invés de criar arquivos.
+#?  [ ] 
 
 ###################################################################################################
 
@@ -72,7 +90,7 @@ class MainBankAccount():
         balance_actual = lerBalance()
         balance_actual = round(balance_actual, 2)
         balance_actual_str = locale.format_string("%.2f", balance_actual, grouping=True)
-        actual_balance = color("Saldo disponível: R$ ","l_g")+color(balance_actual_str, "lwhite")
+        actual_balance = color("Saldo disponível: R$ ","lgreen")+color(balance_actual_str, "lwhite")
         return actual_balance
 
 

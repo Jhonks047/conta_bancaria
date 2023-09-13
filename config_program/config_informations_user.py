@@ -1,6 +1,6 @@
 import string
 import random
-from config_program.config import color_bright
+from config_program.config import color
 import config_program.main_text
 
 
@@ -14,7 +14,7 @@ def criarArquivo(name):
         return True
 
 
-def cadastrarInformacoes(name_file, username, user_token, user_account, money=0):
+def cadastrarInformacoes(name_file, username, user_token, user_account):
     try:
         with open(name_file, "a") as arquivo:
             arquivo.write(f"Username: {username}\nToken: {user_token}\nAccount number: {user_account}")
@@ -61,7 +61,7 @@ def login_user():
             return True
         else:
             tentativas -= 1
-            print(color_bright(f"Usuário/senha inválidos! Apenas mais [ {tentativas} ] tentativas!","r"))
+            print(color(f"Usuário/senha inválidos! Apenas mais [ {tentativas} ] tentativas!","red"))
             if tentativas == 0:
                 return False
 

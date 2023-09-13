@@ -27,7 +27,7 @@ def mixy_lottery():
     Raises:
         ValueError: Retornar um erro caso o usuário digite um valor inválido ou a quantidade de bilhetes == 0
     """
-    titulos(f"LOTERIA MIXy")
+    titulos("LOTERIA MIXy")
     loading(15, "Carregando descrição")
     print(main.MainBankAccount().actual_balance_str())
     print()
