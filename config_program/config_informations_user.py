@@ -1,34 +1,50 @@
 import string
 import random
 from config_program.config import color
-import config_program.main_text
+import requests
+from config_program.main_text import *
 
 
-def criarArquivo(name):
-    try:
-        with open(name, "r") as arquivo:
-            arquivo.read()
-    except FileNotFoundError:
-        return False
-    else:
+DATABASE = "https://conta-bancaria-mkl-default-rtdb.firebaseio.com/"
+
+
+def verificar_users():
+    users = requests.get(f"{DATABASE}.json")
+    if users.status_code:
+        data = users.json()
+        if data is not None:
+            return True
+        else:
+            return False
+
+
+def cadastrarInformacoes(name, username, user_token, user_account):
+    #TODO  Dados de login
+    #!--------------------
+    data_login = f'{{"user_login": "{username}", "user_token": "{user_token}"}}'
+    db_login = f"{DATABASE}users/{name}/dados/login/.json"
+    user_login = requests.patch(db_login, data=data_login)
+    
+    #TODO  Dados bancários
+    #!--------------------
+    db_dados_bancarios = f"{DATABASE}users/{name}/dados/dados_bancarios.json"
+    data_dados_bancarios = f'{{"user_account": "{user_account}"}}'
+    dados_bancarios = requests.patch(db_dados_bancarios, data=data_dados_bancarios)
+    #!--------------------
+    
+    #!  Verificar o salvamento de dados da databse
+    if user_login and dados_bancarios:
+        print(color("Dados salvos com sucesso!", "lgreen"))
         return True
+    else:
+        return False
 
-
-def cadastrarInformacoes(name_file, username, user_token, user_account):
+def cadastrarMoney(money):
     try:
-        with open(name_file, "a") as arquivo:
-            arquivo.write(f"Username: {username}\nToken: {user_token}\nAccount number: {user_account}")
-    except:
-        print("Houve um erro na abertura do arquivo!")
-
-
-def cadastrarMoney(name_file, money):
-    money = str(money)
-    try:
-        with open(name_file, "w") as arquivo:
-            arquivo.write(money)
-    except Exception as e:
-        print(f"Houve um erro ao salvar o dinheiro! {e}")
+        data = f'{{"money_BRL": {money}}}'
+        pass
+    except Exception as error:
+        print(f"Houve um erro ao salvar o dinheiro! {error}")
 
 
 def gerarUser(name):
@@ -52,33 +68,35 @@ def gerarNumeroConta():
     return num
 
 
-def login_user():
-    tentativas = 3
-    while True:
-        user_login = str(input("Digite o user_login: "))
-        user_token_login = str(input("Digite o token de acesso: "))
-        if validarLogin(user_login, user_token_login):
-            return True
-        else:
-            tentativas -= 1
-            print(color(f"Usuário/senha inválidos! Apenas mais [ {tentativas} ] tentativas!","red"))
-            if tentativas == 0:
-                return False
+def login_user(sit=""):
+    if sit == "login":
+        login = str(input("Digite o user_login: ")).strip()
+        return login
+    elif sit == "token":
+        token = str(input("Digite o token de acesso: ")).strip()
+        return token
 
 
-def validarLogin(username, token):
-    with open(f"user_info.txt","r") as arquivo:
-        validate = arquivo.readlines()
-
-    username_validate = validate[0][10:16]
-    token_validate = validate[1][7:10]
-    
-    validarDados = False
-    
-    if username_validate == username and token_validate == token:
-        validarDados = True
-    if validarDados:
-        config_program.main_text.titulos(f"ACESSO PERMITIDO")
-        return True
-    else:
-        return False
+def validarLogin():
+    total_de_tentativas = 3
+    while total_de_tentativas > 0:
+        name = str(input("Digite seu nome: ")).strip().capitalize()
+        user_login = login_user("login")
+        user_token = login_user("token")
+        db = f"{DATABASE}.json"
+        dados = requests.get(db)
+        validate = dados.json()
+        try:
+            validate_login = validate['users'][name]['dados']['login']['user_login']
+            validate_token = validate['users'][name]['dados']['login']['user_token']
+            if user_login == validate_login and user_token == validate_token:
+                return True
+            else:
+                total_de_tentativas -= 1
+                if total_de_tentativas > 0:
+                    print(f"{color('ERRO! ', 'red')}{color(f'Dados incorretos. Você tem mais {total_de_tentativas} tentativas, Tente novamente.', 'lred')}")
+                else:
+                    print(f"{color('Excedeu o número máximo de tentativas! Bloqueando acesso...', 'lred')}")
+                    return False
+        except KeyError as error:
+            print(f"{color('Dados do usuário: ', 'blue')}{color(error, 'lcyan')}{color(' Não encontrados!', 'red')}")
