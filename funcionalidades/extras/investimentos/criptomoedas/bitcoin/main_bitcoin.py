@@ -1,12 +1,13 @@
 from config_program.main_text import *
 from config_program.config import *
+from config_program.config_informations_user import *
 import main
 import requests
 
-db = main.db
+
 
 def get_bitcoin_user(buyed_bitcoins=0):
-    bitcoin_user = requests.get(db)
+    bitcoin_user = requests.get(DATABASE)
     bitcoin_user = bitcoin_user.json()
     if 'bitcoins' in bitcoin_user:
         bitcoin_user = bitcoin_user['bitcoins']
@@ -30,7 +31,7 @@ def get_bitcoin_price(sit="str"):
 def bitcoin():
     titulos("CENTRAL DO BITCOIN")
     print(f"{color('Valor atual do bitcoin:', 'lyellow')} {get_bitcoin_price()}")
-    print(main.MainBankAccount().actual_balance_str())
+    print(main.actual_balance_str())
     print(f"{color('Total de bitcoins:', 'cyan')} | {color('Total em reais:', 'blue')} ")
     print(f"""
         {color("[ A ] Comprar por real", "lyellow")}

@@ -8,6 +8,10 @@ from config_program.main_text import *
 DATABASE = "https://conta-bancaria-mkl-default-rtdb.firebaseio.com/"
 
 
+def get_database_info(sit=""):
+    pass
+
+
 def verificar_users():
     users = requests.get(f"{DATABASE}.json")
     if users.status_code:
