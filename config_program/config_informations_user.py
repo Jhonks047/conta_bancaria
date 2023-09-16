@@ -8,8 +8,36 @@ from config_program.main_text import *
 DATABASE = "https://conta-bancaria-mkl-default-rtdb.firebaseio.com/"
 
 
-def get_database_info(sit=""):
-    pass
+def get_database_info(name, sit=""):
+    if sit == "bitcoin":
+        new_database = DATABASE + ".json"
+        info_bitcoin_user = requests.get(new_database) #    Pega as informações da database
+        info_bitcoin_user = info_bitcoin_user.json() #  Transforma a variável em modo leitura json
+        info_bitcoin_user = info_bitcoin_user['users'][name]['dados'] # Pega apenas a informação de bitcoin do dicionário
+        
+    #?  VERIFICAR INVESTIMENTOS NO BANCO DE DADOS DO USUáRIO
+        if 'investimentos' not in info_bitcoin_user:
+            new_database = f"{DATABASE}users/{name}/dados/investimentos/criptomoedas/.json"
+            status_inv = requests.get(new_database)
+            if status_inv:
+                print(color("Investimentos adicionados com sucesso!", "lgreen"))
+            else:
+                print(color("Erro ao criar dados de investimentos!", "lred"))
+        else: # Caso exista 'investimentos'
+            info_bitcoin_user = info_bitcoin_user['investimentos']['criptomoedas']
+            
+    #?  VERIFICAR BITCOIN NO BANCO DE DADOS DO USUÁRIO
+        if 'bitcoins' in info_bitcoin_user:
+            bitcoin_user = info_bitcoin_user['bitcoins']
+            return bitcoin_user
+        else:
+            data = f'{{"bitcoins": 0}}'
+            new_database = f"{DATABASE}users/{name}/dados/investimentos/criptomoedas/.json"
+            status_btc = requests.patch(new_database, data=data)
+            if status_btc:
+                print(color("Criptomoedas adicionadas com sucesso!", "lgreen"))
+            else:
+                print(color("Erro ao criar dados do bitcoin!", "lred"))
 
 
 def verificar_users():
