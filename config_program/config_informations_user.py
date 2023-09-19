@@ -13,31 +13,14 @@ def get_database_info(name, sit=""):
         new_database = DATABASE + ".json"
         info_bitcoin_user = requests.get(new_database) #    Pega as informações da database
         info_bitcoin_user = info_bitcoin_user.json() #  Transforma a variável em modo leitura json
-        info_bitcoin_user = info_bitcoin_user['users'][name]['dados'] # Pega apenas a informação de bitcoin do dicionário
-        
-    #?  VERIFICAR INVESTIMENTOS NO BANCO DE DADOS DO USUáRIO
-        if 'investimentos' not in info_bitcoin_user:
-            new_database = f"{DATABASE}users/{name}/dados/investimentos/criptomoedas/.json"
-            status_inv = requests.get(new_database)
-            if status_inv:
-                print(color("Investimentos adicionados com sucesso!", "lgreen"))
-            else:
-                print(color("Erro ao criar dados de investimentos!", "lred"))
-        else: # Caso exista 'investimentos'
-            info_bitcoin_user = info_bitcoin_user['investimentos']['criptomoedas']
-            
-    #?  VERIFICAR BITCOIN NO BANCO DE DADOS DO USUÁRIO
-        if 'bitcoins' in info_bitcoin_user:
-            bitcoin_user = info_bitcoin_user['bitcoins']
-            return bitcoin_user
-        else:
-            data = f'{{"bitcoins": 0}}'
-            new_database = f"{DATABASE}users/{name}/dados/investimentos/criptomoedas/.json"
-            status_btc = requests.patch(new_database, data=data)
-            if status_btc:
-                print(color("Criptomoedas adicionadas com sucesso!", "lgreen"))
-            else:
-                print(color("Erro ao criar dados do bitcoin!", "lred"))
+        info_bitcoin_user = info_bitcoin_user['users'][name]['dados']['investimento']['bitcoin'] # Pega apenas a informação de bitcoin do dicionário
+        return info_bitcoin_user
+    elif sit == "saldo_brl":
+        new_database = DATABASE + ".json"
+        info_balance_user = requests.get(new_database)
+        info_balance_user = info_balance_user.json()
+        balance = info_balance_user['users'][name]['dados']['dados_bancarios']['money']['money_BRL']
+        return balance
 
 
 def verificar_users():
@@ -52,32 +35,41 @@ def verificar_users():
 
 def cadastrarInformacoes(name, username, user_token, user_account):
     #TODO  Dados de login
-    #!--------------------
+    #*--------------------
     data_login = f'{{"user_login": "{username}", "user_token": "{user_token}"}}'
     db_login = f"{DATABASE}users/{name}/dados/login/.json"
     user_login = requests.patch(db_login, data=data_login)
+    if user_login:
+        print("Dados de login criados com sucesso!")
+    #*--------------------
     
     #TODO  Dados bancários
-    #!--------------------
-    db_dados_bancarios = f"{DATABASE}users/{name}/dados/dados_bancarios.json"
+    #*--------------------
+    db_dados_bancarios = f"{DATABASE}users/{name}/dados/dados_bancarios/.json"
     data_dados_bancarios = f'{{"user_account": "{user_account}"}}'
     dados_bancarios = requests.patch(db_dados_bancarios, data=data_dados_bancarios)
-    #!--------------------
+    if dados_bancarios:
+        print("Dados Bancários criados com sucesso!")
+    #*--------------------
     
-    #!  Verificar o salvamento de dados da databse
-    if user_login and dados_bancarios:
-        print(color("Dados salvos com sucesso!", "lgreen"))
-        return True
-    else:
-        return False
-
-def cadastrarMoney(money):
-    try:
-        data = f'{{"money_BRL": {money}}}'
-        pass
-    except Exception as error:
-        print(f"Houve um erro ao salvar o dinheiro! {error}")
-
+    #TODO   Dados Monetários
+    #*--------------------
+    db_dados_monetarios = f"{DATABASE}users/{name}/dados/dados_bancarios/money/.json"
+    data_dados_monetarios = f'{{"money_BRL": 0}}'
+    dados_monetarios = requests.patch(db_dados_monetarios, data=data_dados_monetarios)
+    if dados_monetarios:
+        print("Dados monetários criados com sucesso!")
+    #*--------------------
+    
+    #TODO   Dados Investimentos
+    #*--------------------
+    db_dados_investimentos = f"{DATABASE}users/{name}/dados/investimentos/criptomoedas/.json"
+    data_dados_investimentos = f'{{"bitcoin": 0}}'
+    dados_investimentos = requests.patch(db_dados_investimentos, data=data_dados_investimentos)
+    if dados_investimentos:
+        print("Dados de Investimentos criados com sucesso!")
+    #*--------------------
+    return True
 
 def gerarUser(name):
     prefix = name[:3].lower()
@@ -122,7 +114,7 @@ def validarLogin():
             validate_login = validate['users'][name]['dados']['login']['user_login']
             validate_token = validate['users'][name]['dados']['login']['user_token']
             if user_login == validate_login and user_token == validate_token:
-                return True
+                return True, name
             else:
                 total_de_tentativas -= 1
                 if total_de_tentativas > 0:

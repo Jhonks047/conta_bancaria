@@ -1,6 +1,11 @@
+import firebase_admin
+from firebase_admin import credentials
+
+cred = credentials.Certificate("C:\Users\jhona\OneDrive\Documentos\MeusProjetos\conta_bancaria\token\conta-bancaria-mkl-firebase-adminsdk-qxtvi-b80bb839e2.json")
+firebase_admin.initialize_app(cred)
+
 ###################################################################################################
 #TODO                           Outros imports
-import requests
 from time import sleep
 
 ###################################################################################################
@@ -39,37 +44,38 @@ import funcionalidades.extras.main_extras
 def run():
     if not verificar_users():
         titulos("CADASTRAR NOVO USUÁRIO")
-        name = str(input("Digite seu nome: "))
+        name = str(input("Digite seu nome: ")).capitalize().strip()
         username = gerarUser(name)
         token = gerarToken()
         account = gerarNumeroConta()
         loading(30, "Adicionando ao banco de dados")
         if cadastrarInformacoes(name, username, token, account):
-            if validarLogin():
-                menu_principal(name)
+            status, USER = validarLogin()
+            if status:
+                menu_principal(USER)
             else:
                 print(color("Número de tentativas excedido! Fechando programa por segurança!","red"))
         else:
-            print("ERRO")
+            print("ERRO!")
     else:
-        if validarLogin():
-            menu_principal(name)
+        status, USER = validarLogin()
+        if status:
+            menu_principal(USER)
         else:
             print(color("Número de tentativas excedido! Fechando programa por segurança!","red"))
             
             
-def menu_principal(name):
+def menu_principal(USER):
     """Mostra o menu principal junto a função actual_balance_str()
     """
     titulos("SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO NSX")
-    print(actual_balance_str())
+    print(actual_balance_str(USER))
     loading(30, "Carregando menu de opções")
-    menu_options()
-    USER = name
+    menu_options(USER)
 
 
 #!  Mostrar saldo disponivel
-def actual_balance_str():
+def actual_balance_str(USER):
     """Formata o saldo atual em string para mostrar corretamente o valor monetário.
 
     Returns:
@@ -78,7 +84,7 @@ def actual_balance_str():
     print()
     import locale
     locale.setlocale(locale.LC_ALL, 'pt-BR')
-    balance_actual = lerBalance()
+    balance_actual = lerBalance(USER)
     balance_actual = round(balance_actual, 2)
     balance_actual_str = locale.format_string("%.2f", balance_actual, grouping=True)
     actual_balance = color("Saldo disponível: R$ ","lgreen")+color(balance_actual_str, "lwhite")
@@ -86,7 +92,7 @@ def actual_balance_str():
 
 
 #!  Mostrar opções do menu principal
-def menu_options():
+def menu_options(USER):
     """Menu de opções bancárias
     >   ( A )   Depositar
     >   ( B )   Sacar
@@ -110,7 +116,7 @@ def menu_options():
     if option == "A":
         loading(30, "Carregando opção DEPÓSITO")
         qnt_bal = deposit()
-        update_balance(qnt_bal, "add")
+        update_balance(USER, qnt_bal, "add")
         loading(50, "Depositando")
         print(color("Deposito feito com sucesso!","lgreen"))
         sleep(2)

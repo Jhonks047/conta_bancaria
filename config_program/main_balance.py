@@ -1,6 +1,6 @@
-from config_program.config_informations_user import cadastrarMoney
+from config_program.config_informations_user import *
 
-def update_balance(amount=0, sit=""):
+def update_balance(USER, amount=0, sit=""):
     """Atualizar o saldo dentro do programa ao qual foi chamado.
 
     Args:
@@ -12,21 +12,9 @@ def update_balance(amount=0, sit=""):
     Returns:
         FLOAT/INT: Retornar o valor do balance já definido com aumento, ou redução.
     """
-    balance = lerBalance()
+    balance = get_database_info(USER, sit="saldo_brl")
     if sit == "add":
         balance += amount
     elif sit == "rem":
         balance -= amount
-    cadastrarMoney(f"money_user.txt", balance)
     return balance
-
-
-def lerBalance():
-    try:
-        with open(f"money_user.txt","r") as arquivo:
-            balance = arquivo.read()
-    except:
-        print("Erro ao pegar o saldo!")
-    else:
-        balance = float(balance)
-        return balance

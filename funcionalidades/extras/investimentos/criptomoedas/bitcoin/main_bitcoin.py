@@ -6,15 +6,9 @@ import requests
 
 
 
-def get_bitcoin_user(buyed_bitcoins=0):
-    bitcoin_user = requests.get(DATABASE)
-    bitcoin_user = bitcoin_user.json()
-    if 'bitcoins' in bitcoin_user:
-        bitcoin_user = bitcoin_user['bitcoins']
-        bitcoin_user += buyed_bitcoins
-        return bitcoin_user
-    else:
-        return False
+def get_bitcoin_user(name, buyed_bitcoins=0):
+    bitcoin_user = get_bitcoin_user('Jhonatan')
+    print(bitcoin_user)
 
 
 def get_bitcoin_price(sit="str"):
@@ -49,13 +43,4 @@ def bitcoin_real():
     total_bitcoins = valor_bitcoin / get_bitcoin_price(sit="num")
     option = options_SN(f"Você está comprando {total_bitcoins} bitcoins, deseja confirmar? [ S / N ]")
     if option == "S":
-        if not get_bitcoin_user():
-            data = f'{{"bitcoins": {total_bitcoins}}}'
-            status = requests.patch(db, data=data)
-        else:
-            data = f'{{"bitcoins": {get_bitcoin_user(total_bitcoins)}}}'
-            status = requests.patch(db, data=data)
-        if status:
-            print(color("Dados salvos com sucesso!", "lgreen"))
-        else:
-            print(color("Os dados não foram salvos. ERRO!", "lred"))
+        pass
