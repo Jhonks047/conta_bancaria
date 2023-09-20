@@ -5,6 +5,7 @@
 #?  CONFIG_PROGRAM
 from config_program.config import *
 from config_program.main_text import *
+from config_program.main_balance import *
 
 ###################################################################################################
 
@@ -44,7 +45,7 @@ def deposit():
 
 
 #!  Função do saque
-def withdraw():
+def withdraw(USER):
     """Saque bancário.
 
     Raises:
@@ -63,9 +64,12 @@ def withdraw():
                 raise ValueError(f"Você não pode sacar {formated_money(0)}!")
             elif qnt_withdraw < 0:
                 raise ValueError(f"Você não pode sacar um valor negativo!")
+            elif qnt_withdraw > atualizar_balance(USER, sit="num"):
+                raise ValueError(f"Você não pode sacar um valor acima do seu saldo!")
             loading(10, "Registrando saque.")
         except ValueError as error:
             print(color(f"Erro: {error}","red"))
+            return None
         else:
             print(f"{'Você irá sacar: '}{formated_money(qnt_withdraw)}")
             confirm = options_SN("Deseja confirmar o saque? [ S / N ]")

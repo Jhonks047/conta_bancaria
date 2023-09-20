@@ -21,7 +21,7 @@ def criar_usuario(email, senha, uid):
         return None
 
 
-def criar_informacoes(uid):
+def criar_informacoes(uid, numero_da_conta):
     users_ref = db.reference('users')
     
     if not users_ref.child(uid).get():
@@ -31,7 +31,8 @@ def criar_informacoes(uid):
                     'dados_monetarios': {
                         'money_BRL': 0.0,
                         'money_USD': 0.0
-                    }
+                    },
+                    'numero_da_conta': numero_da_conta
                 },
                 'dados_investimento': {
                     'criptomoedas': {

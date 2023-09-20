@@ -24,9 +24,13 @@ import funcionalidades.extras.main_extras
 #!  | Importante *
 #?  | Otimização
 #*  | 
+#TODO   | LEGENDA DAS MARCAÇÕES
+# [x] Tarefa concluída
+# [o] Tarefa em andamento
+# [ ] Tarefa ainda não foi começada
 
 #!  [x] Alterar o run() para salvar os dados em um banco de dados ao invés de criar arquivos.
-#!  [ ] Salvar dados monetários, bilhetes e criptomoedas no banco de dados.
+#!  [o] Salvar dados monetários, bilhetes e criptomoedas no banco de dados.
 #!  [ ] 
 #?  [ ] Criar uma interface de cadastro e login de usuário mais detalhada.
 #?  [ ] Ajustar as telas de loading com outras informações e visivelmente mais agradável.
@@ -38,35 +42,34 @@ import funcionalidades.extras.main_extras
 
 def run():
     global USER
-    titulos("ÁREA DO USUÁRIO")
-    print("""
-        Olá! Seja bem vindo ao banco MKL! Escolha uma opção abaixo do que deseja:
+    titulos("BANCO MKL | ÁREA DO USUÁRIO")
+    print(f"""
+Olá! Seja bem-vindo(a) ao banco MKL!
+
+Escolha uma das seguintes opções:
         
-        [ A ] Fazer login
-        [ B ] Cadastrar-se
+        {color("[ A ] Fazer login", "lcyan")}
+        {color("[ B ] Cadastrar-se", "lgreen")}
         
-    [ X ] Sair do programa
+    {color("[ X ] Sair do programa", "lred")}
     """)
     choice = choices("A", "B", "X")
     if choice == "A":
-        contador = 0
-        while contador < 3:
+        contador = 3
+        while contador > 0:
             try:
                 user = fazer_login()
                 USER = user.uid
-                print(USER)
                 if user:
                     print("Login efetuado com sucesso!")
-                    print(USER)
                     break
-                else:
-                    contador += 1
-                    continue
             except:
+                contador -= 1
+                print(color(f"{contador} tentativas restantes", "lred"))
                 continue
-        if contador == 3:
+        if contador == 0:
             print("Excedeu o limite, fechando programa por segurança!")
-        menu_principal(USER)
+            quit()
     elif choice == "B":
         while True:
             try:
@@ -76,54 +79,37 @@ def run():
                 username = gerarUser(name)
                 uid = gerar_uid(username)
                 email = gerar_email(name)
+                numero_da_conta = gerarNumeroConta()
                 criar_usuario(email=email, senha=password, uid=uid)
-                criar_informacoes(uid)
+                criar_informacoes(uid, numero_da_conta=numero_da_conta)
             except:
                 continue
             else:
-                contador = 0
-                while contador < 3:
+                contador = 3
+                while contador > 0:
                     try:
                         user = fazer_login()
                         USER = user.uid
                         if user:
                             print("Login efetuado com sucesso!")
                             break
-                        else:
-                            contador += 1
-                            continue
                     except:
+                        contador -= 1
+                        print(color(f"{contador} tentativas restantes", "lred"))
                         continue
                 if user:
                     break
-                if contador == 3:
+                if contador == 0:
                     print("Excedeu o limite, fechando programa por segurança!")
-        menu_principal(USER)
+                    quit()
+                menu_principal(USER=USER)
             
 def menu_principal(USER):
     """Mostra o menu principal junto a função actual_balance_str()
     """
-    titulos("SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO NSX")
-    #print(actual_balance_str())
-    loading(30, "Carregando menu de opções")
-    menu_options(USER)
-
-
-#!  Mostrar saldo disponivel
-#def actual_balance_str():
-    """Formata o saldo atual em string para mostrar corretamente o valor monetário.
-
-    Returns:
-        STRING: Retorna a frase SALDO DISPONÍVEL junto ao saldo ja formatado para a região pt-BR
-    """
-    print()
-    import locale
-    locale.setlocale(locale.LC_ALL, 'pt-BR')
-    balance_actual = ""
-    balance_actual = round(balance_actual, 2)
-    balance_actual_str = locale.format_string("%.2f", balance_actual, grouping=True)
-    actual_balance = color("Saldo disponível: R$ ","lgreen")+color(balance_actual_str, "lwhite")
-    return actual_balance
+    titulos("SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO MKL")
+    actual_balance_str(USER=USER), pegar_informacoes_database(USER=USER, sit="conta_bancaria")
+    menu_options(USER=USER)
 
 
 #!  Mostrar opções do menu principal
@@ -138,48 +124,34 @@ def menu_options(USER):
             Opção ( B ): Causar uma exceção caso o usuário tente sacar um valor acima do saldo.
     """
     titulos("MENU DE OPÇÕES")
-    print()
-    print(color("   ( A ) Deposit.","lgreen"))
-    print(color("   ( B ) Withdraw.","lyellow"))
-    print(color("   ( C ) Extras.","lmagenta"))
-    print()
-    print(color("( X ) Sair do programa.","lred"))
-    print()
+    print(f"""
+        {color("[ A ] Realizar Depósito", "green")}
+        {color("[ B ] Relizar Saque", "yellow")}
+        {color("[ C ] Abrir menu de Extras", "magenta")}
+        
+    {color("[ X ] Fechar programa", "lred")}
+    """)
     option = choices("A", "B", "C", "X")
     
     #!  Chama a função do depósito.
     if option == "A":
-        loading(30, "Carregando opção DEPÓSITO")
         qnt_bal = deposit()
-        atualizar_balance(USER, qnt_bal, "add")
-        loading(50, "Depositando")
+        atualizar_balance(USER=USER, amount=qnt_bal, sit="add")
         print(color("Deposito feito com sucesso!","lgreen"))
-        sleep(2)
-        print(text_menu_principal())
-        sleep(2)
     
     #!  Chama a função do saque.
     elif option == "B":
-        loading(30, "Carregando opção SAQUE")
         while True:
             try:
-                qnt_wd = withdraw()
-                if qnt_wd == 0:
+                qnt_wd = withdraw(USER=USER)
+                if not qnt_wd:
                     raise Exception(insufficient_balance())
                 else:
-                    atualizar_balance(USER, qnt_wd, "rem")
-                    loading(50, "Sacando")
+                    atualizar_balance(USER=USER, amount=qnt_wd, sit="rem")
                     print(color("Saque feito com sucesso!","lgreen"))
-                    sleep(2)
-                    print(text_menu_principal())
-                    sleep(2)
                     break
             except Exception as e:
-                loading(30, "Processando")
                 print(f"Ocorreu um erro ao fazer o saque: {e}")
-                sleep(2)
-                print(text_menu_principal())
-                sleep(2)
     
     #!  Chama a função do menu de extras
     elif option == "C":

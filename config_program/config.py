@@ -34,7 +34,7 @@ def choices(*options):
     """
     while True:
         try:
-            option = str(input(f"Digite uma ação: ")).strip().upper()
+            option = str(input(color("[ Digite a letra correspondente à ação desejada ]: ", "lwhite"))).strip().upper()
             if option not in options:
                 raise ValueError("Valor inválido!")
             else:
@@ -136,3 +136,11 @@ def color(text, sit):
         return f"{Fore.LIGHTYELLOW_EX+Style.BRIGHT}{text}"
     elif sit == "lwhite":
         return f"{Fore.LIGHTWHITE_EX+Style.BRIGHT}{text}"
+
+
+def login_usuario():
+    pass
+
+
+def cadastrar_usuario():
+    pass
