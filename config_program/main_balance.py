@@ -1,6 +1,8 @@
 from config_program.config_informations_user import *
+from firebase_admin import db
 
-def update_balance(USER, amount=0, sit=""):
+
+def atualizar_balance(user, amount, sit=""):
     """Atualizar o saldo dentro do programa ao qual foi chamado.
 
     Args:
@@ -12,9 +14,15 @@ def update_balance(USER, amount=0, sit=""):
     Returns:
         FLOAT/INT: Retornar o valor do balance já definido com aumento, ou redução.
     """
-    balance = get_database_info(USER, sit="saldo_brl")
-    if sit == "add":
-        balance += amount
-    elif sit == "rem":
-        balance -= amount
-    return balance
+    try:
+        user_ref = db.reference(f'users/{user}/dados/dados_bancarios/dados_monetarios')
+        saldo_atual = user_ref.child('money_BRL').get()
+    except Exception as error:
+        print(f"Erro ao pegar o saldo atual {error}")
+    else:
+        if sit == "add":
+            novo_saldo = saldo_atual + amount
+            user_ref.update({'money_BRL': novo_saldo})
+        elif sit == "rem":
+            novo_saldo = saldo_atual - amount
+            user_ref.update({'money_BRL': novo_saldo})
