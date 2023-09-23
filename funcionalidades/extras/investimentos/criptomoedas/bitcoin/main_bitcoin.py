@@ -1,14 +1,15 @@
 from config_program.main_text import *
 from config_program.config import *
 from config_program.config_informations_user import *
+from config_program.main_balance import *
 import main
 import requests
+import funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas
 
 
-
-def get_bitcoin_user(name, buyed_bitcoins=0):
-    bitcoin_user = get_bitcoin_user('Jhonatan')
-    print(bitcoin_user)
+def get_bitcoin_user(USER):
+    bitcoins = pegar_informacoes_database(USER=USER, sit="bitcoins")
+    return bitcoins
 
 
 def get_bitcoin_price(sit="str"):
@@ -22,25 +23,44 @@ def get_bitcoin_price(sit="str"):
         return bitcoin_price
 
 
-def bitcoin():
+def bitcoin(USER):
     titulos("CENTRAL DO BITCOIN")
     print(f"{color('Valor atual do bitcoin:', 'lyellow')} {get_bitcoin_price()}")
-    print(main.actual_balance_str())
-    print(f"{color('Total de bitcoins:', 'cyan')} | {color('Total em reais:', 'blue')} ")
+    main.actual_balance_str(USER=USER)
+    print(f"{color('Total de bitcoins:', 'cyan')}{get_bitcoin_user(USER=USER)} | {color('Total em reais:', 'blue')}{formated_money(value=get_bitcoin_user(USER=USER) * get_bitcoin_price(sit='num'))} ")
     print(f"""
         {color("[ A ] Comprar por real", "lyellow")}
         {color("[ B ] Comprar por unidades", "lgreen")}
+        {color("[ C ] Vender bitcoins", 'lmagenta')}
         
     {color("[ X ] Voltar", "lred")}""")
     option = choices("A", "B", "X")
     if option == "A":
-        bitcoin_real()
+        bitcoin_brl(USER=USER)
+    elif option == "B":
+        pass
+    elif option == "C":
+        pass
+    elif option == "X":
+        funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
 
 
-def bitcoin_real():
+def bitcoin_brl(USER):
     titulos("COMPRA DE BITCOINS EM REAL")
     valor_bitcoin = float(input("Digite aqui quantos reais gostaria de comprar em bitcoins: "))
     total_bitcoins = valor_bitcoin / get_bitcoin_price(sit="num")
-    option = options_SN(f"Você está comprando {total_bitcoins} bitcoins, deseja confirmar? [ S / N ]")
+    print(f"""
+    {color('Sua compra ficou no valor de ', 'lblue')}{formated_money(value=valor_bitcoin)}
+    {color('Você está comprando ', 'lblue')}{color(total_bitcoins, 'lyellow')}{' BITCOINS'}""")
+    option = options_SN()
     if option == "S":
-        pass
+        try:
+            users_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
+            bitcoin_usuario_atual = users_ref.child('bitcoin').get()
+        except Exception as error:
+            print(f"Erro ao pegar as informações de bitcoins: {error}")
+        else:
+            atualizar_balance(USER=USER,amount=valor_bitcoin, sit="rem")
+            novo_bitcoin = bitcoin_usuario_atual + total_bitcoins
+            users_ref.update({'bitcoin': novo_bitcoin})
+            bitcoin(USER=USER)

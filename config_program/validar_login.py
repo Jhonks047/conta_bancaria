@@ -41,9 +41,6 @@ def criar_informacoes(uid, numero_da_conta, name):
                         'bitcoin': 0.0,
                         'ethereum': 0.0
                     }
-                },
-                'dados_loterias': {
-                    'mixy_tickets': 0
                 }
             }
         }

@@ -22,8 +22,8 @@ import funcionalidades.extras.main_extras
 #TODO                              COISAS A FAZER
 #TODO   | LEGENDA
 #!  | Importante *
-#?  | Otimização
-#*  | 
+#?  | Otimização | Ajustar
+#*  | Criar
 #TODO   | LEGENDA DAS MARCAÇÕES
 # [x] Tarefa concluída
 # [o] Tarefa em andamento
@@ -31,9 +31,15 @@ import funcionalidades.extras.main_extras
 
 #!  [x] Alterar o run() para salvar os dados em um banco de dados ao invés de criar arquivos.
 #!  [o] Salvar dados monetários, bilhetes e criptomoedas no banco de dados.
-#!  [ ] 
-#?  [ ] Criar uma interface de cadastro e login de usuário mais detalhada.
+#!  [o] Criar a documentação completa de todo o programa bem detalhada para outros desenvolvedores.
+#?  [o] Criar uma interface de cadastro e login de usuário mais detalhada.
 #?  [ ] Ajustar as telas de loading com outras informações e visivelmente mais agradável.
+#?  [o] Substituir algumas palavras em inglês para português.
+#*  [ ] Criar a criptomoeda Ethereum.
+#*  [ ] Criar o inventário que mostre todas as criptomoedas do usuário no menu de criptomoedas.
+#*  [ ] Criar opção de de cartão de crédito.
+#*  [ ] Criar um arquivo para lidar somente com tratamento de erros.
+#*  [ ] 
 
 ###################################################################################################
 
@@ -119,7 +125,8 @@ def menu_options(USER):
         Raises:
             Opção ( B ): Causar uma exceção caso o usuário tente sacar um valor acima do saldo.
     """
-    print("MENU DE OPÇÕES")
+    print()
+    print(color("       MENU DE OPÇÕES", "lred"))
     print(f"""
         {color("[ A ] Realizar Depósito", "green")}
         {color("[ B ] Relizar Saque", "yellow")}

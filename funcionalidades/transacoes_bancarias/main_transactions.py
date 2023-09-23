@@ -35,7 +35,7 @@ def deposit():
         else:
             loading(10, "Registrando depósito.")
             print(f"{'Você irá depositar: '}{formated_money(qnt_balance)}")
-            confirm = options_SN("Deseja confirmar o depósito? [ S / N ]")
+            confirm = options_SN()
             if confirm == "S":
                 break
             else:
@@ -72,7 +72,7 @@ def withdraw(USER):
             return None
         else:
             print(f"{'Você irá sacar: '}{formated_money(qnt_withdraw)}")
-            confirm = options_SN("Deseja confirmar o saque? [ S / N ]")
+            confirm = options_SN()
             if confirm == "S":
                 break
             else:

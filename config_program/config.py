@@ -46,7 +46,7 @@ def choices(*options):
 
 
 #!  Função para continuar uma execução ou não
-def options_SN(text):
+def options_SN():
     """Validar opções
     
     Raises:
@@ -57,7 +57,11 @@ def options_SN(text):
     """
     while True:
         try:
-            option = input(f"{text}: ").strip().upper()
+            print(f"""
+    {color('[ S ] Confirmar transação', 'lgreen')}
+    {color('[ N ] Cancelar transação', 'lred')}
+                """)
+            option = str(input(color("[ Digite a letra correspondente à ação desejada ]: ", "lwhite"))).strip().upper()
             if option not in ["S", "N"]:
                 raise ValueError("Valor inválido!")
             else:

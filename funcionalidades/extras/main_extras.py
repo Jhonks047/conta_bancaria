@@ -20,14 +20,13 @@ def main_extras_menu(USER):
     """Menu principal de extras
     > Apenas mostra as opções disponíveis dos extras.
     """
-    print()
     titulos("MENU DE EXTRAS")
-    print()
-    print(color("   ( A ) Loterias.","lgreen"))
-    print(color("   ( B ) Investimentos  ","lyellow"))
-    print()
-    print(color("( X ) Voltar.","lred"))
-    print()
+    print(f"""
+        {color("[ A ] Loterias.", "lgreen")}
+        {color("[ B ] Investimentos", "lyellow")}
+        
+    {color("[ X ] Voltar.", "lred")}
+        """)
     option = choices("A", "B", "X")
     if option == "A":
         loading(30, "Carregando menu de loterias")

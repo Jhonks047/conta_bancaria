@@ -4,7 +4,7 @@ import funcionalidades.extras.main_extras
 import funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas
 
 
-def menu_investimentos_options():
+def menu_investimentos_options(USER):
     titulos("MENU DOS INVESTIMENTOS")
     print()
     print(f"""
@@ -16,8 +16,8 @@ def menu_investimentos_options():
     option = choices("A", "X")
     if option == "A":
         loading(30, "Carregando menu das criptomoedas")
-        funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas()
+        funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
     elif option == "X":
         loading(20, "Voltando...")
-        funcionalidades.extras.main_extras.main_extras_menu()
+        funcionalidades.extras.main_extras.main_extras_menu(USER=USER)
     
