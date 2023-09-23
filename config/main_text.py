@@ -6,7 +6,7 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-def titulos(msg):
+def titulos(msg, cor="magenta"):
     """Mostrar um texto em formato de TÍTULO, com =- em cima e em baixo, com o texto centralizado
 
     Args:
@@ -15,7 +15,7 @@ def titulos(msg):
     width = 60
     print()
     print("=-" * 30)
-    print(color(f"{msg.center(width)}","magenta"))
+    print(color(f"{msg.center(width)}",cor))
     print("=-" * 30)
 
 

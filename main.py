@@ -97,7 +97,6 @@ Escolha uma das seguintes opções:
         USER = cadastrar_usuario()
         if USER:
             menu_principal(USER=USER)
-
 #!  Mostrar menu principal
 def menu_principal(USER):
     """Mostra o menu principal junto a função actual_balance_str()

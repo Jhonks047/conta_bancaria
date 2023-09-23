@@ -20,13 +20,13 @@ def deposit():
     Returns:
         FLOAT: Retorna o valor do depósito definido pelo usuário
     """
-    titulos("DEPOSIT")
+    titulos(msg="DEPOSIT", cor="lgreen")
     while True:
         try:
             qnt_balance = str(input(f"Digite o valor que deseja depositar R$: ")).replace(",", ".").strip()
             qnt_balance = float(qnt_balance)
             if qnt_balance == 0:
-                raise ValueError(f"Você não pode depositar {formated_money(0)}!")
+                raise ValueError(f"Você não pode depositar {formated_money(value=0)}!")
             elif qnt_balance < 0:
                 raise ValueError(f"Você não pode depositar um valor negativo!")
         except ValueError as error:

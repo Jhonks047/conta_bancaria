@@ -6,13 +6,11 @@ from config.main_text import *
 
 def menu_investimentos_options(USER):
     titulos("MENU DOS INVESTIMENTOS")
-    print()
     print(f"""
         {color("[ A ] Criptomoedas", "lcyan")}
         
     {color("[ X ] Voltar", "lred")}
         """)
-    print()
     option = choices("A", "X")
     if option == "A":
         loading(30, "Carregando menu das criptomoedas")

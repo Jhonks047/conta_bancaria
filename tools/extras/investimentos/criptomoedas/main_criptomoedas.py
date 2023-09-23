@@ -5,13 +5,12 @@ from config.main_text import *
 
 
 def main_criptomoedas(USER):
-    print()
     titulos("MENU DAS CRIPTOMOEDAS")
-    print()
     print(f"""
         {color("[ A ] Bitcoin", "lyellow")}
         
-    {color("[ X ] Voltar", "lred")}""")
+    {color("[ X ] Voltar", "lred")}
+    """)
     option = choices("A", "X")
     if option == "A":
         loading(30, "Carregando menu do BITCOIN")

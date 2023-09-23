@@ -31,4 +31,4 @@ def main_extras_menu(USER):
         tools.extras.investimentos.main_investimentos.menu_investimentos_options(USER=USER)
     elif option == "X":
         loading(20, "Voltando...")
-        main.menu_principal()
+        main.menu_principal(USER=USER)
