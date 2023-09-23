@@ -11,12 +11,12 @@ from time import sleep
 import main
 
 #?  CONFIG_PROGRAM
-from config_program.config import *
-from config_program.main_text import *
-from config_program.main_balance import *
+from config.get_informations import *
+from config.main_text import *
+from config.main_balance import *
 
 #?  FUNCIONALIDADES
-import funcionalidades.extras.loterias.main_lottery
+import tools.extras.loterias.main_lottery
 
 ###################################################################################################
 
@@ -75,7 +75,7 @@ def mixy_lottery(USER):
                 print()
     elif confirm_menu == "X":
         loading(20, "Voltando...")
-        funcionalidades.extras.loterias.main_lottery.menu_lottery_options()
+        tools.extras.loterias.main_lottery.menu_lottery_options()
 
 
 #!  Função para a criação dos tickets do sistema e do usuário

@@ -2,13 +2,10 @@
 
 #TODO                           imports da pasta do programa
 
-#?  CONFIG_PROGRAM
-from config_program.config import *
-from config_program.main_text import *
-
-#?  FUNCIONALIDADES
-import funcionalidades.extras.loterias.mixy_lottery.main_mixy
-import funcionalidades.extras.main_extras
+import tools.extras.loterias.mixy_lottery.main_mixy
+import tools.extras.main_extras
+from config.get_informations import *
+from config.main_text import *
 
 ###################################################################################################
 
@@ -25,7 +22,7 @@ def menu_lottery_options(USER):
     print()
     option = choices("A", "X")
     if option == "A":
-        funcionalidades.extras.loterias.mixy_lottery.main_mixy.mixy_lottery(USER=USER)
+        tools.extras.loterias.mixy_lottery.main_mixy.mixy_lottery(USER=USER)
     elif option == "X":
         loading(20, "Voltando...")
-        funcionalidades.extras.main_extras.main_extras_menu()
+        tools.extras.main_extras.main_extras_menu()

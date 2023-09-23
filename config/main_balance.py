@@ -1,6 +1,7 @@
-from config_program.config_informations_user import *
 from firebase_admin import db
-from config_program.config import *
+
+from config.informations_user import *
+from config.main_text import *
 
 
 def atualizar_balance(USER, amount=0, sit=""):

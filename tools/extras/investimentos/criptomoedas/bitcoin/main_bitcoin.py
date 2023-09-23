@@ -1,10 +1,11 @@
-from config_program.main_text import *
-from config_program.config import *
-from config_program.config_informations_user import *
-from config_program.main_balance import *
-import main
 import requests
-import funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas
+
+import main
+import tools.extras.investimentos.criptomoedas.main_criptomoedas
+from config.get_informations import *
+from config.informations_user import *
+from config.main_balance import *
+from config.main_text import *
 
 
 def get_bitcoin_user(USER):
@@ -42,7 +43,7 @@ def bitcoin(USER):
     elif option == "C":
         pass
     elif option == "X":
-        funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
+        tools.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
 
 
 def bitcoin_brl(USER):

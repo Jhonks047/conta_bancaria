@@ -1,7 +1,7 @@
-from config_program.config import *
-from config_program.main_text import *
-import funcionalidades.extras.main_extras
-import funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas
+import tools.extras.investimentos.criptomoedas.main_criptomoedas
+import tools.extras.main_extras
+from config.get_informations import *
+from config.main_text import *
 
 
 def menu_investimentos_options(USER):
@@ -16,8 +16,8 @@ def menu_investimentos_options(USER):
     option = choices("A", "X")
     if option == "A":
         loading(30, "Carregando menu das criptomoedas")
-        funcionalidades.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
+        tools.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
     elif option == "X":
         loading(20, "Voltando...")
-        funcionalidades.extras.main_extras.main_extras_menu(USER=USER)
+        tools.extras.main_extras.main_extras_menu(USER=USER)
     

@@ -1,11 +1,11 @@
 ###################################################################################################
 
-from colorama import Fore, Style, init
 from firebase_admin import db
+
+from config.main_text import *
 
 ###################################################################################################
 
-init(autoreset=True)
 
 #!  Função que simula uma barra de carregamento
 def loading(total, msg="loading"):
@@ -16,6 +16,7 @@ def loading(total, msg="loading"):
         msg (str, optional): Mensagem para ser exibida ao lado da barra de carregamento. Padrão "loading".
     """
     from time import sleep
+
     from tqdm import tqdm
     print()
     for _ in tqdm(range(total), desc=Fore.LIGHTWHITE_EX+Style.BRIGHT+f"{msg}", ascii=False, ncols=50, bar_format="{l_bar}{bar}"+Style.RESET_ALL):
@@ -86,61 +87,6 @@ def formated_money(value):
     value = locale.format_string("%.2f", value, grouping=True)
     formated = f"{Fore.LIGHTGREEN_EX+Style.BRIGHT}{'R$ '}{Fore.LIGHTWHITE_EX}{value}"
     return formated
-
-
-#!  Função para definir uma cor com BRIGHT
-def color(text, sit):
-    """Alterar a cor da frase/texto
-
-    Args:
-        text (STRING): Aqui será definido o texto/mensagem que o usuário irá colocar cores.
-        sit (STRING): Definir a cor que será usada.
-            Cores disponíveis:
-            
-                - red  |  lred
-                - green  |  lgreen
-                - blue  |  lblue
-                - magenta  |  lmagenta
-                - cyan  |  lcyan
-                - yellow  |  lyellow
-                - white  |  lwhite
-                
-            As cores que possuem o " l " antes do tipo da cor é para indicar que a cor é mais clara
-    """
-    sit = str(sit).lower()
-#TODO......................NORMAL COLORS......................
-
-    if sit == "red":
-        return f"{Fore.RED+Style.BRIGHT}{text}"
-    elif sit == "green":
-        return f"{Fore.GREEN+Style.BRIGHT}{text}"
-    elif sit == "blue":
-        return f"{Fore.BLUE+Style.BRIGHT}{text}"
-    elif sit == "magenta":
-        return f"{Fore.MAGENTA+Style.BRIGHT}{text}"
-    elif sit == "cyan":
-        return f"{Fore.CYAN+Style.BRIGHT}{text}"
-    elif sit == "yellow":
-        return f"{Fore.YELLOW+Style.BRIGHT}{text}"
-    elif sit == "white":
-        return f"{Fore.WHITE+Style.BRIGHT}{text}"
-    
-#TODO......................LIGHT COLORS......................
-
-    elif sit == "lred":
-        return f"{Fore.LIGHTRED_EX+Style.BRIGHT}{text}"
-    elif sit == "lgreen":
-        return f"{Fore.LIGHTGREEN_EX+Style.BRIGHT}{text}"
-    elif sit == "lblue":
-        return f"{Fore.LIGHTBLUE_EX+Style.BRIGHT}{text}"
-    elif sit == "lmagenta":
-        return f"{Fore.LIGHTMAGENTA_EX+Style.BRIGHT}{text}"
-    elif sit == "lcyan":
-        return f"{Fore.LIGHTCYAN_EX+Style.BRIGHT}{text}"
-    elif sit == "lyellow":
-        return f"{Fore.LIGHTYELLOW_EX+Style.BRIGHT}{text}"
-    elif sit == "lwhite":
-        return f"{Fore.LIGHTWHITE_EX+Style.BRIGHT}{text}"
 
 
 def pegar_informacoes_database(USER, sit=""):

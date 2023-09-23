@@ -1,7 +1,8 @@
 import firebase_admin
-from firebase_admin import credentials, auth, db
-from config_program.main_text import *
-from config_program.config_informations_user import *
+from firebase_admin import auth, credentials, db
+
+from config.informations_user import *
+from config.main_text import *
 
 cred = credentials.Certificate(r"C:\Users\jhona\OneDrive\Documentos\MeusProjetos\conta_bancaria\token\conta-bancaria-mkl-firebase-adminsdk-qxtvi-b80bb839e2.json")
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://conta-bancaria-mkl-default-rtdb.firebaseio.com'})

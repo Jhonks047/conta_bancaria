@@ -2,10 +2,9 @@
 
 #TODO                           imports da pasta do programa
 
-#?  CONFIG_PROGRAM
-from config_program.config import *
-from config_program.main_text import *
-from config_program.main_balance import *
+from config.get_informations import *
+from config.main_balance import *
+from config.main_text import *
 
 ###################################################################################################
 

@@ -1,21 +1,17 @@
 ###################################################################################################
 #TODO                           Outros imports
-from time import sleep
 
 ###################################################################################################
 
 #TODO                           Imports da pasta do programa
 
-#?  CONFIG_PROGRAM
-from config_program.config import *
-from config_program.main_balance import *
-from config_program.main_text import *
-from config_program.config_informations_user import *
-from config_program.validar_login import *
-
-#?  FUNCIONALIDADES
-from funcionalidades.transacoes_bancarias.main_transactions import *
-import funcionalidades.extras.main_extras
+import tools.extras.main_extras
+from config.get_informations import *
+from config.informations_user import *
+from config.main_balance import *
+from config.main_text import *
+from config.validar_login import *
+from tools.transacoes_bancarias.main_transactions import *
 
 ###################################################################################################
 
@@ -23,7 +19,7 @@ import funcionalidades.extras.main_extras
 #TODO   | LEGENDA
 #!  | Importante *
 #?  | Otimização | Ajustar
-#*  | Criar
+#*  | Criação
 #TODO   | LEGENDA DAS MARCAÇÕES
 # [x] Tarefa concluída
 # [o] Tarefa em andamento
@@ -38,7 +34,7 @@ import funcionalidades.extras.main_extras
 #*  [ ] Criar a criptomoeda Ethereum.
 #*  [ ] Criar o inventário que mostre todas as criptomoedas do usuário no menu de criptomoedas.
 #*  [ ] Criar opção de de cartão de crédito.
-#*  [ ] Criar um arquivo para lidar somente com tratamento de erros.
+#*  [ ] Criar um arquivo para lidar somente com tratamento de erros utilizando decoradores
 #*  [ ] 
 
 ###################################################################################################
@@ -159,7 +155,7 @@ def menu_options(USER):
     #!  Chama a função do menu de extras
     elif option == "C":
         loading(30, "Carregando menu de extras")
-        funcionalidades.extras.main_extras.main_extras_menu(USER=USER)
+        tools.extras.main_extras.main_extras_menu(USER=USER)
 
     #!  Sair do programa
     elif option == "X":
