@@ -6,12 +6,13 @@ from config_program.config_informations_user import *
 cred = credentials.Certificate(r"C:\Users\jhona\OneDrive\Documentos\MeusProjetos\conta_bancaria\token\conta-bancaria-mkl-firebase-adminsdk-qxtvi-b80bb839e2.json")
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://conta-bancaria-mkl-default-rtdb.firebaseio.com'})
 
-def criar_usuario(email, senha, uid):
+def criar_usuario(email, senha, uid, name):
     try:
         user = auth.create_user(
             uid=uid,
             email=email,
-            password=senha
+            password=senha,
+            display_name=name
             )
         print(f"Usuário criado com o ID: {user.uid}")
         return user
@@ -21,7 +22,7 @@ def criar_usuario(email, senha, uid):
         return None
 
 
-def criar_informacoes(uid, numero_da_conta):
+def criar_informacoes(uid, numero_da_conta, name):
     users_ref = db.reference('users')
     
     if not users_ref.child(uid).get():
@@ -32,7 +33,8 @@ def criar_informacoes(uid, numero_da_conta):
                         'money_BRL': 0.0,
                         'money_USD': 0.0
                     },
-                    'numero_da_conta': numero_da_conta
+                    'numero_da_conta': numero_da_conta,
+                    'display_name': name
                 },
                 'dados_investimento': {
                     'criptomoedas': {

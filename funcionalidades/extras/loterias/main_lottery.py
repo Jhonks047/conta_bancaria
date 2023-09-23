@@ -13,7 +13,7 @@ import funcionalidades.extras.main_extras
 ###################################################################################################
 
 
-def menu_lottery_options():
+def menu_lottery_options(USER):
     """Menu principal de loterias
     > Apenas mostra as opções disponíveis das loterias.
     """
@@ -25,7 +25,7 @@ def menu_lottery_options():
     print()
     option = choices("A", "X")
     if option == "A":
-        funcionalidades.extras.loterias.mixy_lottery.main_mixy.mixy_lottery()
+        funcionalidades.extras.loterias.mixy_lottery.main_mixy.mixy_lottery(USER=USER)
     elif option == "X":
         loading(20, "Voltando...")
         funcionalidades.extras.main_extras.main_extras_menu()

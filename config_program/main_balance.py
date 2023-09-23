@@ -1,5 +1,6 @@
 from config_program.config_informations_user import *
 from firebase_admin import db
+from config_program.config import *
 
 
 def atualizar_balance(USER, amount=0, sit=""):
@@ -43,16 +44,5 @@ def actual_balance_str(USER):
     balance_actual = atualizar_balance(USER, sit="num")
     balance_actual = round(balance_actual, 2)
     balance_actual_str = locale.format_string("%.2f", balance_actual, grouping=True)
-    actual_balance = color("Saldo disponível: R$ ","lgreen")+color(balance_actual_str, "lwhite")
+    actual_balance = f"{color('Saldo disponível: R$ ','lgreen')}{color(balance_actual_str, 'lwhite')}"
     print(actual_balance)
-
-
-def pegar_informacoes_database(USER, sit=""):
-    if sit == "conta_bancaria":
-        try:
-            users_ref = db.reference(f'users/{USER}/dados/dados_bancarios')
-            conta_bancaria = users_ref.child('numero_da_conta').get()
-        except Exception as error:
-            print(f"Erro ao pegar o número da conta: {error}")
-        else:
-            print(f"{color('Número da conta: ', 'lcyan')}{color(conta_bancaria, 'lyellow')}")

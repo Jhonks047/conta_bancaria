@@ -7,10 +7,10 @@ from time import sleep
 #TODO                           Imports da pasta do programa
 
 #?  CONFIG_PROGRAM
+from config_program.config import *
 from config_program.main_balance import *
 from config_program.main_text import *
 from config_program.config_informations_user import *
-from config_program.config import *
 from config_program.validar_login import *
 
 #?  FUNCIONALIDADES
@@ -37,11 +37,44 @@ import funcionalidades.extras.main_extras
 
 ###################################################################################################
 
+def login_usuario():
+    tentativas = 3
+    while tentativas > 0:
+        try:
+            user = fazer_login()
+            USER = user.uid
+            if user:
+                print("Login efetuado com sucesso!")
+                break
+        except:
+            tentativas -= 1
+            print(color(f"{tentativas} tentativas restantes", "lred"))
+    if tentativas == 0:
+        print("Excedeu o limite, fechando programa por segurança!")
+        quit()
+    return USER
+        
 
-#!  Mostrar menu principal
+def cadastrar_usuario():
+    while True:
+        try:
+            titulos("CADASTRAMENTO DE USUÁRIO")
+            name = str(input("Digite seu nome: ")).capitalize().strip()
+            password = str(input("Digite uma senha para o cadastro: ")).strip()
+            username = gerarUser(name)
+            uid = gerar_uid(username)
+            email = gerar_email(uid)
+            numero_da_conta = gerarNumeroConta()
+            criar_usuario(email=email, senha=password, uid=uid, name=name)
+            criar_informacoes(uid, numero_da_conta=numero_da_conta, name=name)
+        except:
+            continue
+        else:
+            USER = login_usuario()
+            return USER
+
 
 def run():
-    global USER
     titulos("BANCO MKL | ÁREA DO USUÁRIO")
     print(f"""
 Olá! Seja bem-vindo(a) ao banco MKL!
@@ -55,60 +88,23 @@ Escolha uma das seguintes opções:
     """)
     choice = choices("A", "B", "X")
     if choice == "A":
-        contador = 3
-        while contador > 0:
-            try:
-                user = fazer_login()
-                USER = user.uid
-                if user:
-                    print("Login efetuado com sucesso!")
-                    break
-            except:
-                contador -= 1
-                print(color(f"{contador} tentativas restantes", "lred"))
-                continue
-        if contador == 0:
-            print("Excedeu o limite, fechando programa por segurança!")
-            quit()
+        USER = login_usuario()
+        if USER:
+            menu_principal(USER=USER)
     elif choice == "B":
-        while True:
-            try:
-                titulos("CADASTRAMENTO DE USUÁRIO")
-                name = str(input("Digite seu nome: ")).capitalize().strip()
-                password = str(input("Digite uma senha para o cadastro: ")).strip()
-                username = gerarUser(name)
-                uid = gerar_uid(username)
-                email = gerar_email(name)
-                numero_da_conta = gerarNumeroConta()
-                criar_usuario(email=email, senha=password, uid=uid)
-                criar_informacoes(uid, numero_da_conta=numero_da_conta)
-            except:
-                continue
-            else:
-                contador = 3
-                while contador > 0:
-                    try:
-                        user = fazer_login()
-                        USER = user.uid
-                        if user:
-                            print("Login efetuado com sucesso!")
-                            break
-                    except:
-                        contador -= 1
-                        print(color(f"{contador} tentativas restantes", "lred"))
-                        continue
-                if user:
-                    break
-                if contador == 0:
-                    print("Excedeu o limite, fechando programa por segurança!")
-                    quit()
-                menu_principal(USER=USER)
-            
+        USER = cadastrar_usuario()
+        if USER:
+            menu_principal(USER=USER)
+
+#!  Mostrar menu principal
 def menu_principal(USER):
     """Mostra o menu principal junto a função actual_balance_str()
     """
-    titulos("SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO MKL")
-    actual_balance_str(USER=USER), pegar_informacoes_database(USER=USER, sit="conta_bancaria")
+    titulos(f"SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO MKL")
+    nome_usuario = pegar_informacoes_database(USER=USER, sit="nome")
+    print(f"{'Usuário logado: '}{nome_usuario} | UID: {USER}")
+    actual_balance_str(USER=USER)
+    pegar_informacoes_database(USER=USER, sit="conta_bancaria")
     menu_options(USER=USER)
 
 
@@ -123,7 +119,7 @@ def menu_options(USER):
         Raises:
             Opção ( B ): Causar uma exceção caso o usuário tente sacar um valor acima do saldo.
     """
-    titulos("MENU DE OPÇÕES")
+    print("MENU DE OPÇÕES")
     print(f"""
         {color("[ A ] Realizar Depósito", "green")}
         {color("[ B ] Relizar Saque", "yellow")}
@@ -156,7 +152,7 @@ def menu_options(USER):
     #!  Chama a função do menu de extras
     elif option == "C":
         loading(30, "Carregando menu de extras")
-        funcionalidades.extras.main_extras.main_extras_menu()
+        funcionalidades.extras.main_extras.main_extras_menu(USER=USER)
 
     #!  Sair do programa
     elif option == "X":

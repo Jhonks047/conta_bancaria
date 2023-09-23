@@ -1,6 +1,7 @@
 ###################################################################################################
 
 from colorama import Fore, Style, init
+from firebase_admin import db
 
 ###################################################################################################
 
@@ -138,9 +139,28 @@ def color(text, sit):
         return f"{Fore.LIGHTWHITE_EX+Style.BRIGHT}{text}"
 
 
-def login_usuario():
-    pass
-
-
-def cadastrar_usuario():
-    pass
+def pegar_informacoes_database(USER, sit=""):
+    if sit == "conta_bancaria":
+        try:
+            users_ref = db.reference(f'users/{USER}/dados/dados_bancarios')
+            conta_bancaria = users_ref.child('numero_da_conta').get()
+        except Exception as error:
+            print(f"Erro ao pegar o número da conta: {error}")
+        else:
+            print(f"{color('Número da conta: ', 'lcyan')}{color(conta_bancaria, 'lyellow')}")
+    elif sit == "nome":
+        try:
+            users_ref = db.reference(f'users/{USER}/dados/dados_bancarios')
+            name = users_ref.child('display_name').get()
+        except Exception as error:
+            print(f"Erro ao pegar o nome da conta: {error}")
+        else:
+            return f"{color(name, 'lmagenta')}"
+    elif sit == "bitcoins":
+        try:
+            users_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
+            bitcoins = users_ref.child('bitcoin').get()
+        except Exception as error:
+            print(f"Erro ao pegar o saldo de bitcoin: {error}")
+        else:
+            return bitcoins

@@ -1,8 +1,5 @@
 import string
 import random
-from config_program.config import color
-from config_program.main_text import *
-
 
 
 def gerarUser(name):
@@ -28,8 +25,8 @@ def gerarNumeroConta():
     return num
 
 
-def gerar_email(name):
-    prefix = name[:3]
+def gerar_email(uid):
+    prefix = uid
     sufix = '@mkl.bank'
     email = prefix + sufix
     return email

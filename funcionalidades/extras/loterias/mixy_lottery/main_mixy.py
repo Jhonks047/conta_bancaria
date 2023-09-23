@@ -21,7 +21,7 @@ import funcionalidades.extras.loterias.main_lottery
 ###################################################################################################
 
 
-def mixy_lottery():
+def mixy_lottery(USER):
     """Menu da compra de tickets.
 
     Raises:
@@ -29,45 +29,41 @@ def mixy_lottery():
     """
     titulos("LOTERIA MIXy")
     loading(15, "Carregando descrição")
-    print(main.MainBankAccount().actual_balance_str())
+    main.actual_balance_str(USER=USER)
     print()
     print(color(" COMO FUNCIONA: ","r_b"))
-    sleep(0.3)
-    print(color("    Você compra bilhetes que são numerados de 1 a 36, contendo 9 números cada.","green"))
-    print(color("    A máquina sorteia 1 único bilhete contendo apenas 6 números dentre os 36.","green"))
-    print(color("    As faixas de premiações são as seguintes:","green"))
+    print("""
+        Você compra bilhetes que são numerados de 1 a 36, contendo 9 números cada.
+        A máquina sorteia 1 único bilhete contendo apenas 6 números dentre os 36.
+        As faixas de premiações são as seguintes:""")
     print()
-    print(color(" PREMIAÇÕES ","m_b"))
-    sleep(0.3)
-    print(f"    {'4 Acertos >> '}{formated_money(6561)}")
-    sleep(0.3)
-    print(f"    {'5 Acertos >> '}{formated_money(59049)}")
-    sleep(0.3)
-    print(f"    {'6 Acertos >> '}{formated_money(4782969)}")
-    sleep(0.3)
+    print(f""" PREMIAÇÕES
+                {color('4 Acertos >> ', 'lblue')}{formated_money(value=6561)}
+                {color('5 Acertos >> ', 'lcyan')}{formated_money(value=59049)}
+                {color('6 Acertos >> ', 'lmagenta')}{formated_money(value=4782969)}
+                """)
     print()
-    print(color(" Preço por bilhete:","lwhite"), end=" ")
-    print(formated_money(9))
+    print(f"{color('Preço por bilhete: ', 'lwhite')}{formated_money(value=9)}")
     titulos("OPÇÕES DISPONÍVEIS")
-    print(color("   ( A ) Comprar bilhetes.","green"))
-    print()
-    print(color("( X ) Voltar","lred"))
-    print()
+    print("""
+        [ A ] Comprar bilhetes
+        
+    [ X ] Voltar""")
     confirm_menu = choices("A", "X")
     if confirm_menu == "A":
         while True:
             titulos("COMPRA DE TICKETS")
             try:
                 while True:
-                    qnt_tickets = int(input("Digite quantos bilhetes deseja comprar: "))
-                    if qnt_tickets <= 0:
+                    tickets_usuario = int(input("Digite quantos bilhetes deseja comprar: "))
+                    if tickets_usuario <= 0:
                         raise ValueError("A quantidade de bilhetes não pode ser menor ou igual a 0!")
-                    value_ticket = qnt_tickets * 9
+                    value_ticket = tickets_usuario * 9
                     loading(15, "Adicionando ao carrinho")
-                    print(f"Sua compra ficou no valor de {formated_money(value_ticket)}")
+                    print(f"Sua compra ficou no valor de {formated_money(value=value_ticket)}")
                     confirm = options_SN("Deseja confirmar sua compra? [ S / N ]")
                     if confirm == "S":
-                        mixy_tickets(qnt_tickets)
+                        mixy_tickets(USER=USER, tickets=tickets_usuario)
                         break
                     else:
                         print("Voltando ao menu de compra de bilhetes.")
@@ -81,7 +77,7 @@ def mixy_lottery():
 
 
 #!  Função para a criação dos tickets do sistema e do usuário
-def mixy_tickets(qnt_tickets):
+def mixy_tickets(USER, tickets):
     """Criar tickets do usuário e do sistema para o sorteio da loteria
 
     Args:
@@ -99,7 +95,7 @@ def mixy_tickets(qnt_tickets):
             ticket_system.sort()
 
     #?  Gerar tickets do usuário com 9 números de 1 a 36
-    while len(total_tickets_users) < qnt_tickets:#!.....................Tickets do usuário
+    while len(total_tickets_users) < tickets:#!.....................Tickets do usuário
         tickets_users.clear()
         while len(tickets_users) <9:
             mixy_ticket_user = randint(1, 36)
@@ -107,11 +103,11 @@ def mixy_tickets(qnt_tickets):
                 tickets_users.append(mixy_ticket_user)
                 tickets_users.sort()
         total_tickets_users.append(tickets_users[:])
-    mixy_games(total_tickets_users, ticket_system, qnt_tickets)
+    mixy_games(USER=USER, user_tickets=total_tickets_users, system_ticket=ticket_system, total_buyed_tickets=tickets)
 
 
 #!  Função para mostrar os jogos adquiridos pelo usuário
-def mixy_games(user_tickets, system_ticket, total_buyed_tickets):
+def mixy_games(USER, user_tickets, system_ticket, total_buyed_tickets):
     """Lista os jogos adquiridos e define o valor dos tickets
 
     Args:
@@ -128,13 +124,13 @@ def mixy_games(user_tickets, system_ticket, total_buyed_tickets):
     total_price_ticket = ticket_price * qnt_tickets #!   Total do preço dos tickets
     
     #!  Erro caso o valor dos tickets seja maior que o saldo disponível
-    if total_price_ticket > update_balance():
+    if total_price_ticket > atualizar_balance(USER=USER, sit="num"):
         print(insufficient_balance())
         print(text_menu_principal())
         loading(30, "Voltando ao menu.")
-        main.MainBankAccount.menu_principal()
+        main.menu_principal(USER=USER)
     else:
-        update_balance(total_price_ticket, "rem")
+        atualizar_balance(USER=USER, amount=total_price_ticket, sit="rem")
         loading(30, "Processando pagamento")
         print(color("Pagamento efetuado com sucesso!","lgreen"))
         sleep(1)
@@ -149,7 +145,7 @@ def mixy_games(user_tickets, system_ticket, total_buyed_tickets):
             sleep(0.2)
         
         print()
-        print(color(" O sistema irá sortear o bilhete. ","r_b"))
+        print(color(" O sistema irá sortear o bilhete. ","lmagenta"))
         loading(30, "Sorteando números")
         print()
         print(color("Bilhete gerado pela máquina:","lwhite"),end=" ")
@@ -185,18 +181,18 @@ def mixy_games(user_tickets, system_ticket, total_buyed_tickets):
         titulos("GANHOS DA LOTERIA MIXy")
         print(f"{'Você ganhou no total: '}{formated_money(total_prize_amount)}")
         loading(60, f"Adicionando {formated_money(total_prize_amount)} ao saldo")
-        print(main.MainBankAccount().actual_balance_str())
+        main.actual_balance_str(USER=USER)
     confirm = options_SN("Deseja continuar apostando? [ S / N ]")
     if confirm == "S":
-        mixy_lottery()
+        mixy_lottery(USER=USER)
     else:
         text_menu_principal()
         loading(10, "Voltando ao menu")
-        main.MainBankAccount.menu_principal()
+        main.menu_principal(USER=USER)
 
 
 #!  Função para premiar o usuário em caso de acertos
-def premiacoes_mixy(qnt_num=0):
+def premiacoes_mixy(USER, qnt_num=0):
     """Define a premiação em caso de acertos
 
     Args:
@@ -209,21 +205,21 @@ def premiacoes_mixy(qnt_num=0):
     
     #!  Acertos com 4 números.
     if qnt_num == 4:
-        update_balance( premiacao_4_acertos, "add")
+        atualizar_balance(USER=USER, amount=premiacao_4_acertos, sit="add")
         print(color("Parabéns! Você acertou 4 números e foi premiado em","lgreen"),end=" ")
         print(formated_money(premiacao_4_acertos))
         return premiacao_4_acertos
     
     #! Acertos com 5 números.
     if qnt_num == 5:
-        update_balance(premiacao_5_acertos, "add")
+        atualizar_balance(USER=USER, amount=premiacao_5_acertos, sit="add")
         print(color("Parabéns! Você acertou 5 números e foi premiado em","green"),end=" ")
         print(formated_money(premiacao_5_acertos))
         return premiacao_5_acertos
     
     #! Acertos com 6 números
     if qnt_num == 6:
-        update_balance(premiacao_total, "add")
+        atualizar_balance(USER=USER, amount=premiacao_total, sit="add")
         print(color("Parabéns! Você acertou todos números e foi premiado em","green"),end=" ")
         print(formated_money(premiacao_total))
         return premiacao_total
