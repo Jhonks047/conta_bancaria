@@ -20,10 +20,15 @@ def deposit():
     Returns:
         FLOAT: Retorna o valor do depósito definido pelo usuário
     """
-    titulos(msg="DEPOSIT", cor="lgreen")
+    titulos(msg="ÁREA DE DEPÓSITO", cor="lgreen")
+    print(f"""
+    {color("Aqui você realiza seus depósitos para usar os ", "lcyan")}
+    {color("serviços bancários, incluindo investimentos e ", "lcyan")}
+    {color("apostas na área das loterias entre outras transações.", "lcyan")}
+    """)
     while True:
         try:
-            qnt_balance = str(input(f"Digite o valor que deseja depositar R$: ")).replace(",", ".").strip()
+            qnt_balance = str(input(color("Digite o valor que deseja depositar R$: ", "lwhite"))).replace(",", ".").strip()
             qnt_balance = float(qnt_balance)
             if qnt_balance == 0:
                 raise ValueError(f"Você não pode depositar {formated_money(value=0)}!")
@@ -54,10 +59,13 @@ def withdraw(USER):
     Returns:
         FLOAT: Retorna o valor do saque definido pelo usuário
     """
-    titulos("WITHDRAW")
+    titulos(msg="ÁREA DE TRANSFERÊNCIA", cor="lred")
+    print(f"""
+        {color("Aqui você transfere dinheiro da sua conta ", "lcyan")}
+        {color("para outra pessoa ou instituição.", "lcyan")}""")
     while True:
         try:
-            qnt_withdraw = str(input("Digite o valor que deseja sacar R$: ")).replace(",", ".").strip()
+            qnt_withdraw = str(input("Digite o valor que deseja transferir R$: ")).replace(",", ".").strip()
             qnt_withdraw = float(qnt_withdraw)
             if qnt_withdraw == 0:
                 raise ValueError(f"Você não pode sacar {formated_money(0)}!")

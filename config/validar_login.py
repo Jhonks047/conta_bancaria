@@ -15,10 +15,14 @@ def criar_usuario(email, senha, uid, name):
             password=senha,
             display_name=name
             )
-        print(f"Usuário criado com o ID: {user.uid}")
+        print(f"""
+    {color("Usuário registrado com sucesso! Seja muito bem vindo(a): ", "lgreen")}>> {color(user.display_name, "lwhite")} <<
+    {color("Por favor, guarde esse UID, ele é sua única forma de login!", "lcyan")}
+    {color("Sua UID: ", "yellow")}{color(user.uid, "lwhite")}
+    {color("Para efetuar o login usando seu UID, basta escrever o UID junto ao @mkl.bank. Exemplo usando seu UID: ", "lcyan")}{color(user.uid, "lwhite")}{color("@mkl.bank", "lyellow")}
+    """)
         return user
     except auth.EmailAlreadyExistsError:
-        print(color("Erro ao criar um usuário com esse nome!", "lred"))
         print(color("Um email com esse nome já existe!", "lcyan"))
         return None
 
@@ -49,8 +53,10 @@ def criar_informacoes(uid, numero_da_conta, name):
 
 
 def fazer_login():
-    titulos("ÁREA DE LOGIN")
-    user_email = str(input("Digite seu email, incluindo o <@mkl.bank>: ")).strip().lower()
+    titulos(msg="ÁREA DE LOGIN", cor="yellow")
+    print(color("Olá! Bem vindo de volta, para efetuar seu login, basta informar suas credenciais abaixo.", "lcyan"))
+    print()
+    user_email = str(input("Digite seu login <Seu UID + @mkl.bank>: ")).strip().lower()
     user_password = str(input("Digite sua senha: ")).strip()
     try:
         user = auth.get_user_by_email(user_email)
@@ -59,7 +65,7 @@ def fazer_login():
             email=user_email,
             password=user_password
         )
-        print(f"Usuário logado com o ID: {user.uid}")
+        print(f"Usuário logado com o ID: {user.uid}@mkl.bank")
         return user
     except auth.UserNotFoundError:
         print("O usuário não foi encontrado!")

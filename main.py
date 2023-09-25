@@ -31,6 +31,7 @@ from tools.transacoes_bancarias.main_transactions import *
 #?  [o] Criar uma interface de cadastro e login de usuário mais detalhada.
 #?  [ ] Ajustar as telas de loading com outras informações e visivelmente mais agradável.
 #?  [o] Substituir algumas palavras em inglês para português.
+#?  [o] Arrumar todas as funções do jogo MIXy
 #*  [ ] Criar a criptomoeda Ethereum.
 #*  [ ] Criar o inventário que mostre todas as criptomoedas do usuário no menu de criptomoedas.
 #*  [ ] Criar opção de de cartão de crédito.
@@ -38,6 +39,7 @@ from tools.transacoes_bancarias.main_transactions import *
 #*  [ ] 
 
 ###################################################################################################
+
 
 def login_usuario():
     tentativas = 3
@@ -60,7 +62,7 @@ def login_usuario():
 def cadastrar_usuario():
     while True:
         try:
-            titulos("CADASTRAMENTO DE USUÁRIO")
+            titulos(msg="CADASTRAMENTO DE USUÁRIO", cor="lgreen")
             name = str(input("Digite seu nome: ")).capitalize().strip()
             password = str(input("Digite uma senha para o cadastro: ")).strip()
             username = gerarUser(name)
@@ -121,10 +123,10 @@ def menu_options(USER):
             Opção ( B ): Causar uma exceção caso o usuário tente sacar um valor acima do saldo.
     """
     print()
-    print(color("       MENU DE OPÇÕES", "lred"))
+    print(color("     MENU DE OPÇÕES", "lred"))
     print(f"""
         {color("[ A ] Realizar Depósito", "green")}
-        {color("[ B ] Relizar Saque", "yellow")}
+        {color("[ B ] Relizar Saque < atualmente desabilitado >", "white")}
         {color("[ C ] Abrir menu de Extras", "magenta")}
         
     {color("[ X ] Fechar programa", "lred")}
@@ -138,7 +140,7 @@ def menu_options(USER):
         print(color("Deposito feito com sucesso!","lgreen"))
     
     #!  Chama a função do saque.
-    elif option == "B":
+    elif option == "Z":
         while True:
             try:
                 qnt_wd = withdraw(USER=USER)
@@ -153,13 +155,12 @@ def menu_options(USER):
     
     #!  Chama a função do menu de extras
     elif option == "C":
-        loading(30, "Carregando menu de extras")
         tools.extras.main_extras.main_extras_menu(USER=USER)
 
     #!  Sair do programa
     elif option == "X":
         loading(30, "Encerrando programa...")
-        titulos("PROGRAMA ENCERRADO!")
+        titulos(msg="PROGRAMA ENCERRADO!", cor="red")
         quit()
     menu_principal(USER)
 

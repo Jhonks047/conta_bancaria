@@ -15,14 +15,13 @@ def menu_lottery_options(USER):
     > Apenas mostra as opções disponíveis das loterias.
     """
     titulos("MENU DAS LOTERIAS")
-    print()
-    print(color("   ( A ) MIXy.","lmagenta"))
-    print()
-    print(color("( X ) Voltar.","lred"))
-    print()
+    print(f"""
+        {color("[ A ] Loteria MIXy", "lmagenta")}
+        
+    {color("[ X ] Voltar", "lred")}
+    """)
     option = choices("A", "X")
     if option == "A":
         tools.extras.loterias.mixy_lottery.main_mixy.mixy_lottery(USER=USER)
     elif option == "X":
-        loading(20, "Voltando...")
         tools.extras.main_extras.main_extras_menu()
