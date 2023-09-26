@@ -13,9 +13,7 @@ def menu_investimentos_options(USER):
         """)
     option = choices("A", "X")
     if option == "A":
-        loading(30, "Carregando menu das criptomoedas")
         tools.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
     elif option == "X":
-        loading(20, "Voltando...")
         tools.extras.main_extras.main_extras_menu(USER=USER)
     

@@ -13,8 +13,6 @@ def main_criptomoedas(USER):
     """)
     option = choices("A", "X")
     if option == "A":
-        loading(30, "Carregando menu do BITCOIN")
         tools.extras.investimentos.criptomoedas.bitcoin.main_bitcoin.bitcoin(USER=USER)
     elif option == "X":
-        loading(20, "Voltando...")
         tools.extras.investimentos.main_investimentos.menu_investimentos_options(USER=USER)

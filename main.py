@@ -26,7 +26,7 @@ from tools.transacoes_bancarias.main_transactions import *
 # [ ] Tarefa ainda não foi começada
 
 #!  [x] Alterar o run() para salvar os dados em um banco de dados ao invés de criar arquivos.
-#!  [o] Salvar dados monetários, bilhetes e criptomoedas no banco de dados.
+#!  [x] Salvar dados monetários e criptomoedas no banco de dados.
 #!  [o] Criar a documentação completa de todo o programa bem detalhada para outros desenvolvedores.
 #?  [o] Criar uma interface de cadastro e login de usuário mais detalhada.
 #?  [ ] Ajustar as telas de loading com outras informações e visivelmente mais agradável.
@@ -34,9 +34,9 @@ from tools.transacoes_bancarias.main_transactions import *
 #?  [o] Arrumar todas as funções do jogo MIXy
 #*  [ ] Criar a criptomoeda Ethereum.
 #*  [ ] Criar o inventário que mostre todas as criptomoedas do usuário no menu de criptomoedas.
-#*  [ ] Criar opção de de cartão de crédito.
+#*  [ ] Criar opção de cartão de crédito.
 #*  [ ] Criar um arquivo para lidar somente com tratamento de erros utilizando decoradores
-#*  [ ] 
+#*  [ ] Criar transferências bancárias entre contas salvas na database
 
 ###################################################################################################
 
@@ -57,7 +57,7 @@ def login_usuario():
         print("Excedeu o limite, fechando programa por segurança!")
         quit()
     return USER
-        
+
 
 def cadastrar_usuario():
     while True:
@@ -99,6 +99,8 @@ Escolha uma das seguintes opções:
         USER = cadastrar_usuario()
         if USER:
             menu_principal(USER=USER)
+
+
 #!  Mostrar menu principal
 def menu_principal(USER):
     """Mostra o menu principal junto a função actual_balance_str()
