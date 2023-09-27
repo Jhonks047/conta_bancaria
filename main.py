@@ -1,7 +1,4 @@
 ###################################################################################################
-#TODO                           Outros imports
-
-###################################################################################################
 
 #TODO                           Imports da pasta do programa
 
@@ -42,6 +39,14 @@ from tools.transacoes_bancarias.main_transactions import *
 
 
 def login_usuario():
+    """ÁREA DE LOGIN DO USUÁRIO
+        Essa função faz o login do usuario chamando outra função para validar com os dados do banco de dados.
+    
+    RETURN:
+        Essa função retorna o USER, que nada mais é do que o user.uid que é gerado aleatoriamente em outra função
+        que será usado posteriormente para validar transações bancárias e etc.
+    """
+
     tentativas = 3
     while tentativas > 0:
         try:
@@ -60,6 +65,18 @@ def login_usuario():
 
 
 def cadastrar_usuario():
+    """CADASTRAMENTO DE USUÁRIOS
+        Essa função faz o cadastro dos usuários utilizando o nome que o usuário informar, chamando outras funções como:
+        < gerarUser > Serve para pegar o nome que o usuário informou, pegando as 3 primeiras letras.
+        < gerar_uid > Função para pegar o username gerado pela função anterior e cria seu UID.
+        < gerar_email > Função para pegar o uid do usuário gerado pela função anterior e acrescentando @mkl.bank.
+        < gerarNumeroConta > Função para gerar um número aleatório da conta bancária do usuário.
+
+    RETURN:
+        Caso o cadastro do usuário ter êxito, o USER irá chamar a função de < login_usuario > e irá armazenar o UID
+        e irá retornar o USER.
+    """
+
     while True:
         try:
             titulos(msg="CADASTRAMENTO DE USUÁRIO", cor="lgreen")
@@ -79,6 +96,14 @@ def cadastrar_usuario():
 
 
 def run():
+    """CHAMAR A ÁREA DO USUÁRIO
+        Essa função chama a área do usuário para efetuar o login ou se cadastrar, contendo as seguintes opções:
+        
+        >> [ A ] Fazer login
+        >> [ B ] Cadastrar-se
+        >> [ X ] Sair do programa
+    """
+
     titulos("BANCO MKL | ÁREA DO USUÁRIO")
     print(f"""
 Olá! Seja bem-vindo(a) ao banco MKL!
@@ -101,10 +126,22 @@ Escolha uma das seguintes opções:
             menu_principal(USER=USER)
 
 
-#!  Mostrar menu principal
-def menu_principal(USER):
-    """Mostra o menu principal junto a função actual_balance_str()
+#  Mostrar menu principal
+def menu_principal(USER: str):
+    """Função para mostrar o menu principal junto as seguintes funções:
+    
+        nome_usuario = < pegar_informacoes_database > Pegar o nome do usuário e armazenar na variável < nome_usuario > e mostrar no menu.
+    
+        < actual_balanced_str > Pega o dinheiro do usuário e mostra no menu totalmente formatado em BRL > R$0,00 <
+    
+        < pegar_informacoes_database > Aqui a função mostra no menu a conta bancária do usuário.
+    
+        < menu_options > Chama o menu de opções do menu principal.
+    
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
     """
+    
     titulos(f"SEJA BEM VINDO AO MENU PRINCIPAL DO BANCO MKL")
     nome_usuario = pegar_informacoes_database(USER=USER, sit="nome")
     print(f"{'Usuário logado: '}{nome_usuario} | UID: {USER}")
@@ -113,17 +150,20 @@ def menu_principal(USER):
     menu_options(USER=USER)
 
 
-#!  Mostrar opções do menu principal
-def menu_options(USER):
+#  Mostrar opções do menu principal
+def menu_options(USER: str):
     """Menu de opções bancárias
-    >   ( A )   Depositar
-    >   ( B )   Sacar
-    >   ( C )   Extras
-    >   ( X )   Sair do programa
+        Essa função realiza transações bancárias de acordo com a escolha do usuário.
+        Dentro de cada escolha do usuário há uma função que será chamada, as escolhas do usuário são as seguintes:
+            >   [ A ]   Realizar Depósito
+            >   [ B ]   Realizar Saque < atualmente desabilitado >
+            >   [ C ]   Abrir menu de Extras
+            >   [ X ]   Fechar programa
     
-        Raises:
-            Opção ( B ): Causar uma exceção caso o usuário tente sacar um valor acima do saldo.
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
     """
+    
     print()
     print(color("     MENU DE OPÇÕES", "lred"))
     print(f"""
@@ -135,31 +175,21 @@ def menu_options(USER):
     """)
     option = choices("A", "B", "C", "X")
     
-    #!  Chama a função do depósito.
+    #  Chama a função do depósito.
     if option == "A":
         qnt_bal = deposit()
         atualizar_balance(USER=USER, amount=qnt_bal, sit="add")
         print(color("Deposito feito com sucesso!","lgreen"))
     
-    #!  Chama a função do saque.
+    #  Chama a função do saque.
     elif option == "Z":
-        while True:
-            try:
-                qnt_wd = withdraw(USER=USER)
-                if not qnt_wd:
-                    raise Exception(insufficient_balance())
-                else:
-                    atualizar_balance(USER=USER, amount=qnt_wd, sit="rem")
-                    print(color("Saque feito com sucesso!","lgreen"))
-                    break
-            except Exception as e:
-                print(f"Ocorreu um erro ao fazer o saque: {e}")
+        pass
     
-    #!  Chama a função do menu de extras
+    #  Chama a função do menu de extras
     elif option == "C":
         tools.extras.main_extras.main_extras_menu(USER=USER)
 
-    #!  Sair do programa
+    #  Sair do programa
     elif option == "X":
         loading(30, "Encerrando programa...")
         titulos(msg="PROGRAMA ENCERRADO!", cor="red")
@@ -167,6 +197,6 @@ def menu_options(USER):
     menu_principal(USER)
 
 
-#!  Programa principal
+#  Programa principal
 if __name__ == "__main__":
     run()

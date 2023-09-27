@@ -7,15 +7,21 @@ from config.informations_user import *
 from config.main_balance import *
 from config.main_text import *
 
-def users_ref(USER, amount, sit):
-    user_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
-    bitcoin_atual_usuario = user_ref.child('bitcoin').get()
-    if sit == "add":
-        novo_bitcoin = bitcoin_atual_usuario + amount
-        user_ref.update({f'bitcoin': novo_bitcoin})
-    elif sit == "rem":
-        novo_bitcoin = bitcoin_atual_usuario - amount
-        user_ref.update({'bitcoin': {novo_bitcoin}})
+def users_ref(USER, amount=0, sit=""):
+    try:
+        user_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
+        bitcoin_atual_usuario = user_ref.child('bitcoin').get()
+    except Exception:
+        print("Erro ao pegar dados de bitcoin")
+    else:
+        if sit == "add":
+            novo_bitcoin = bitcoin_atual_usuario + amount
+            user_ref.update({f'bitcoin': novo_bitcoin})
+        elif sit == "rem":
+            novo_bitcoin = bitcoin_atual_usuario - amount
+            user_ref.update({'bitcoin': novo_bitcoin})
+        elif sit == "user":
+            return bitcoin_atual_usuario
 
 
 def get_bitcoin_user(USER):
@@ -40,8 +46,8 @@ def bitcoin(USER):
     main.actual_balance_str(USER=USER)
     print(f"{color('Meus bitcoins: ', 'cyan')}{color(get_bitcoin_user(USER=USER), 'lyellow')} | {formated_money(value=get_bitcoin_user(USER=USER) * get_bitcoin_price(sit='num'))} ")
     print(f"""
-        {color("[ A ] Comprar por real", "lyellow")}
-        {color("[ B ] Comprar por unidades", "lgreen")}
+        {color("[ A ] Comprar em reais", "lyellow")}
+        {color("[ B ] Comprar por unidades/fracionado", "lgreen")}
         {color("[ C ] Vender bitcoins", 'lmagenta')}
         
     {color("[ X ] Voltar", "lred")}
@@ -57,6 +63,7 @@ def bitcoin(USER):
         tools.extras.investimentos.criptomoedas.main_criptomoedas.main_criptomoedas(USER=USER)
 
 
+#   COMPRAR BITCOIN EM REAIS
 def bitcoin_brl(USER):
     titulos(msg="COMPRA DE BITCOINS EM REAL", cor="lyellow")
     while True:
@@ -79,19 +86,23 @@ def bitcoin_brl(USER):
     opcao = options_SN()
     if opcao == "S":
         try:
-            users_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
-            bitcoin_usuario_atual = users_ref.child('bitcoin').get()
+            bitcoin_usuario = users_ref(USER=USER, sit="num")
         except Exception as error:
             print(f"Erro ao pegar as informações de bitcoins: {error}")
         else:
-            atualizar_balance(USER=USER,amount=valor_bitcoin, sit="rem")
-            novo_bitcoin = bitcoin_usuario_atual + total_bitcoins
-            users_ref.update({'bitcoin': novo_bitcoin})
-            bitcoin(USER=USER)
+            try:
+                novo_bitcoin = bitcoin_usuario + total_bitcoins
+                users_ref(USER=USER, amount=novo_bitcoin, sit="add")
+            except Exception as error:
+                print(f"Não foi possivel adicionar dados de bitcoin ao banco de dados: {error}")
+            else:
+                atualizar_balance(USER=USER,amount=valor_bitcoin, sit="rem")
+                bitcoin(USER=USER)
     elif opcao == "N":
         bitcoin_brl(USER=USER)
 
 
+#   COMPRAR BITCOIN FRACIONADO
 def bitcoin_fracionado(USER):
     titulos(msg="COMPRA DE BITCOIN POR UNIDADE | FRACIONADO", cor="lyellow")
     while True:
@@ -127,45 +138,65 @@ def bitcoin_fracionado(USER):
         bitcoin_fracionado(USER=USER)
 
 
+#   VENDER BITCOIN
 def vender_bitcoin(USER):
     titulos(msg="VENDA DE BITCOINS", cor="lyellow")
     print(f"""
     {color("Você pode escolher alguma das opções abaixo para vender seus bitcoins.", sit="lcyan")}
         
-        {color("[ A ] Vender por unidade.", "lyellow")}
-        {color("[ B ] Vender fracionado.", "lblue")}
-        {color("[ C ] Vender tudo.", "lred")}
+        {color("[ A ] Vender por unidade/fracionado.", "lyellow")}
+        {color("[ B ] Vender tudo.", "lred")}
     
     {color("[ X ] Voltar", "red")}
     """)
-    opcao = choices("A", "B", "C", "X")
+    opcao = choices("A", "B", "X")
+
+    #   VENDER POR UNIDADE
     if opcao == "A":
-        titulos(msg="VENDA DE BITCOINS | UNIDADE", cor="lyellow")
+        titulos(msg="VENDA DE BITCOINS | UNIDADE/FRACIONADO", cor="lyellow")
         while True:
-            venda_unidade = int(input(color("[ Digite quantas unidades deseja vender ]: ", "lwhite")))
+            venda_unidade = float(input(color("[ Digite quantas unidades deseja vender ]: ", "lwhite")))
             valor_venda_unidade = venda_unidade * get_bitcoin_price(sit="num")
-            try:
-                users_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
-                bitcoin_usuario = users_ref.child('bitcoin').get()
-            except Exception as error:
-                print(f"Erro ao pegar as informações de bitcoins: {error}")
+            bitcoin_usuario = users_ref(USER=USER, sit="user")
+            if venda_unidade > bitcoin_usuario:
+                print(color("Você não tem bitcoins suficientes para venda.", "lred"))
+                continue
             else:
-                if venda_unidade > bitcoin_usuario:
-                    print(color("Você não tem bitcoins suficientes para venda.", "lred"))
-                    continue
+                print(f"""
+    {color("Sua venda ficou no valor total de ", "lblue")}{formated_money(value=valor_venda_unidade)}
+    {color("Você está vendendo: ", "lcyan")}{color(venda_unidade, "lwhite")}{color(" Bitcoin(s)", "lyellow")}""")
+                opcao = options_SN()
+                if opcao == "S":
+                    try:
+                        atualizar_balance(USER=USER, amount=valor_venda_unidade, sit="add")
+                        novo_bitcoin = bitcoin_usuario - venda_unidade
+                        users_ref(USER=USER, amount=novo_bitcoin, sit="add")
+                    except Exception as error:
+                        print(f"Erro ao salvar dados de bitcoins no banco de dados: {error}")
+                    else:
+                        bitcoin(USER=USER)
+                elif opcao == "N":
+                    vender_bitcoin(USER=USER)
+
+    #   VENDER TUDO
+    elif opcao == "B":
+        bitcoin_usuario = users_ref(USER=USER, sit="user")
+        if bitcoin_usuario <= 0:
+            print(f"Você não tem nenhum bitcoin para vender, voltando ao menu anterior...")
+        else:
+            titulos(msg="VENDA DE BITCOINS | VENDER TUDO", cor="lred")
+            valor_venda_tudo = bitcoin_usuario * get_bitcoin_price(sit="num")
+            print(f"""
+        {color("Sua venda ficou no valor total de ", "lblue")}{formated_money(value=valor_venda_tudo)}
+        {color("Você está vendendo todos os seus bitcoins", "lcyan")}""")
+            opcao = options_SN()
+            if opcao == "S":
+                try:
+                    users_ref(USER=USER, amount=bitcoin_usuario, sit="rem")
+                except Exception as error:
+                    print(f"Erro ao salvar dados de bitcoins no banco de dados: {error}")
                 else:
-                    print(f"""
-        {color("Sua venda ficou no valor total de ", "lblue")}{formated_money(value=valor_venda_unidade)}
-        {color("Você está vendendo: ", "lcyan")}{color(venda_unidade, "lwhite")}{color(" Bitcoin(s)", "lyellow")}""")
-                    opcao = options_SN()
-                    if opcao == "S":
-                        try:
-                            atualizar_balance(USER=USER, amount=valor_venda_unidade, sit="add")
-                            novo_bitcoin = bitcoin_usuario - venda_unidade
-                            users_ref.update({'bitcoin': novo_bitcoin})
-                        except Exception as error:
-                            print(f"Erro ao salvar dados de bitcoins no banco de dados: {error}")
-                        else:
-                            bitcoin(USER=USER)
-                    elif opcao == "N":
-                        vender_bitcoin(USER=USER)
+                    atualizar_balance(USER=USER, amount=valor_venda_tudo, sit="add")
+                    bitcoin(USER=USER)
+            elif opcao == "N":
+                vender_bitcoin(USER=USER)

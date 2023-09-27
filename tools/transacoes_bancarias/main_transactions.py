@@ -9,17 +9,19 @@ from config.main_text import *
 ###################################################################################################
 
 
-#!  Função do depósito
+#  Função do depósito
 def deposit():
     """Depósito bancário
-
+        Essa função efetua o depósito para o usuário, definido o valor pelo qnt_balance que começa com o tipo str para poder trocar
+        a ( , ) pelo ( . ) para transformar em float
     Raises:
         ValueError = Depósito igual a 0: Impedir que o usuário deposite um valor 0.
         ValueError = Depósito com valor negativo: Impedir que o usuário deposite com um valor negativo.
 
     Returns:
-        FLOAT: Retorna o valor do depósito definido pelo usuário
+        FLOAT: Retorna o valor do depósito definido pelo usuário para adicionar o saldo a conta do usuário no menu principal.
     """
+
     titulos(msg="ÁREA DE DEPÓSITO", cor="lgreen")
     print(f"""
     {color("Aqui você realiza seus depósitos para usar os ", "lcyan")}
@@ -48,17 +50,19 @@ def deposit():
     return qnt_balance
 
 
-#!  Função do saque
+#  Função do saque
 def withdraw(USER):
     """Saque bancário.
-
+        Essa função efetua o saque para o usuário, definido o valor pelo qnt_withdraw que começa com o tipo str para poder trocar
+        a ( , ) pelo ( . ) para transformar em float
     Raises:
         ValueError = Saque igual a 0: Impedir que o usuário saque um valor 0.
         ValueError = Saque com valor negativo: Impedir que o usuário saque com um valor negativo.
 
     Returns:
-        FLOAT: Retorna o valor do saque definido pelo usuário
+        FLOAT: Retorna o valor do saque definido pelo usuário para remover o saldo a conta do usuário no menu principal.
     """
+
     titulos(msg="ÁREA DE TRANSFERÊNCIA", cor="lred")
     print(f"""
         {color("Aqui você transfere dinheiro da sua conta ", "lcyan")}

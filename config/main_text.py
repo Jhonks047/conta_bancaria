@@ -6,11 +6,12 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-def titulos(msg, cor="magenta"):
+def titulos(msg: str, cor: str="magenta"):
     """Mostrar um texto em formato de TÍTULO, com =- em cima e em baixo, com o texto centralizado
 
     Args:
-        msg (STR): Pegar o valor digitado pelo usuário e converter em formato de TÍTULO
+        msg ( STR ): Pegar o valor digitado pelo usuário e converter em formato de TÍTULO
+        cor ( STR ): Define a cor que será mostrado no título. Padrão >> magenta <<
     """
     width = 60
     print()
@@ -19,21 +20,13 @@ def titulos(msg, cor="magenta"):
     print("=-" * 30)
 
 
-def text_menu_principal():
-    return f"{color('Voltando ao menu principal!', 'lyellow')}"
-
-
-def insufficient_balance():
-    return f"{color('Saldo insuficiente!', 'lred')}"
-
-
 #!  Função para definir uma cor com BRIGHT
-def color(text, sit):
+def color(text: str, sit: str):
     """Alterar a cor da frase/texto
 
     Args:
-        text (STRING): Aqui será definido o texto/mensagem que o usuário irá colocar cores.
-        sit (STRING): Definir a cor que será usada.
+        text ( STRING ): Aqui será definido o texto/mensagem que o usuário irá colocar cores.
+        sit ( STR ): Definir a cor que será usada.
             Cores disponíveis:
             
                 - red  |  lred
@@ -45,6 +38,8 @@ def color(text, sit):
                 - white  |  lwhite
                 
             As cores que possuem o " l " antes do tipo da cor é para indicar que a cor é mais clara
+    Return:
+        ( STR ): Retorna o texto junto a cor escolhida
     """
     sit = str(sit).lower()
 #TODO......................NORMAL COLORS......................

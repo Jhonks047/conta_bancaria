@@ -7,13 +7,13 @@ from config.main_text import *
 ###################################################################################################
 
 
-#!  Função que simula uma barra de carregamento
-def loading(total, msg="loading"):
+#!  NÃO USAR
+def loading(total: int, msg: str="loading"):
     """Barra de carregamento
 
     Args:
         total (INT): Definir o tamanho do tempo de carregamento
-        msg (str, optional): Mensagem para ser exibida ao lado da barra de carregamento. Padrão "loading".
+        msg (STR, optional): Mensagem para ser exibida ao lado da barra de carregamento. Padrão "loading".
     """
     from time import sleep
 
@@ -26,13 +26,17 @@ def loading(total, msg="loading"):
 
 #!  Função para escolher opções do menu principal
 def choices(*options):
-    """Validar as ações do player
+    """Validar as escolhas do usuário
+    
+    Args:
+        options: Recebe vários argumentos e armazena em uma tupla, para verificar se a opção escolhida pelo
+            usuário bate com as opções usadas nesse argumento.
     
     Raises:
-        ValueError: Causar uma exceção quando digitado um valor não permitido
+        ValueError: Causar uma exceção quando digitado um valor não permitido.
 
     Returns:
-        STR: Retornar a option para o menu na qual ele foi chamado.
+        STR: Retornar a < option > para o menu na qual ele foi chamado.
     """
     while True:
         try:
@@ -48,13 +52,16 @@ def choices(*options):
 
 #!  Função para continuar uma execução ou não
 def options_SN():
-    """Validar opções
+    """Validar opções de SIM ou NÃO
+    
+        > [ S ] Confirmar transação.
+        > [ N ] Cancelar transação.
     
     Raises:
         ValueError: Causar uma exceção quando digitado um valor não permitido
 
     Returns:
-        STR: Retornar a option para o menu na qual ele foi chamado.
+        STR: Retornar a < option > para o menu na qual ele foi chamado.
     """
     while True:
         try:
@@ -73,11 +80,11 @@ def options_SN():
 
 
 #!  Função para formatar o número em string com base na localidade
-def formated_money(value):
+def formated_money(value: float):
     """Formatar um número para um valor monetário com base na região escolhida
 
     Args:
-        value (FLOAT): Pega o valor value e converte em string com a formatação adequada.
+        value (FLOAT): Pega o valor e converte em string com a formatação adequada.
 
     Returns:
         STRING: Retorna o valor monetário com base na localidade.
@@ -89,7 +96,20 @@ def formated_money(value):
     return formated
 
 
-def pegar_informacoes_database(USER, sit=""):
+def pegar_informacoes_database(USER: str, sit: str):
+    """PEGAR INFORMAÇÕES DENTRO DO BANCO DE DADOS
+
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
+        sit (str): 
+                    >> "conta_bancaria": Pegar a informação da conta bancária do usuário.
+                    >> "nome": Pegar o nome do usuário.
+                    >> "bitcoins": Pegar a informação de bitcoins do usuário
+
+    Returns:
+        "nome": Retorna o nome do usuário com a cor magenta.
+        "bitcoins": Retorna a quantia em bitcoins do usuário.
+    """
     if sit == "conta_bancaria":
         try:
             users_ref = db.reference(f'users/{USER}/dados/dados_bancarios')

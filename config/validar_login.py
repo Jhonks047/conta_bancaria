@@ -4,10 +4,23 @@ from firebase_admin import auth, credentials, db
 from config.informations_user import *
 from config.main_text import *
 
+
 cred = credentials.Certificate(r"C:\Users\jhona\OneDrive\Documentos\MeusProjetos\conta_bancaria\token\conta-bancaria-mkl-firebase-adminsdk-qxtvi-b80bb839e2.json")
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://conta-bancaria-mkl-default-rtdb.firebaseio.com'})
 
-def criar_usuario(email, senha, uid, name):
+
+def criar_usuario(email: str, senha: str, uid: str, name: str):
+    """CRIAÇÃO DO USUÁRIO AO BANCO DE DADOS
+
+    Args:
+        email (str): Email gerado por outra função para adicionar ao banco de dados
+        senha (str): Senha escolhida pelo usuário para autenticar o login
+        uid (str): UID gerada pelo usuário para autenticar as transações bancárias
+        name (str): Nome do usuário
+
+    Returns:
+        CREDENTIALS: Retorna as credenciais do user para efetuar o login
+    """    
     try:
         user = auth.create_user(
             uid=uid,
@@ -27,7 +40,15 @@ def criar_usuario(email, senha, uid, name):
         return None
 
 
-def criar_informacoes(uid, numero_da_conta, name):
+def criar_informacoes(uid: str, numero_da_conta: str, name: str):
+    """CRIA AS INFORMAÇÕES DENTRO DO BANCO DE DADOS
+
+    Args:
+        uid (str): UID do usuário para criar os dados no banco de dados
+        numero_da_conta (str): Número da conta para salvar as informações no banco de dados
+        name (str): Nome do usuário para adicionar ao banco de dados
+    """
+
     users_ref = db.reference('users')
     
     if not users_ref.child(uid).get():
@@ -53,6 +74,11 @@ def criar_informacoes(uid, numero_da_conta, name):
 
 
 def fazer_login():
+    """REALIZAR O LOGIN DO USUÁRIO AUTENTICANDO NO BANCO DE DADOS
+
+    Returns:
+        CREDENTIALS: Retorna as credenciais do usuário para autenticar o login em outra função
+    """
     titulos(msg="ÁREA DE LOGIN", cor="yellow")
     print(color("Olá! Bem vindo de volta, para efetuar seu login, basta informar suas credenciais abaixo.", "lcyan"))
     print()

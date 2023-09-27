@@ -4,17 +4,19 @@ from config.informations_user import *
 from config.main_text import *
 
 
-def atualizar_balance(USER, amount=0, sit=""):
+def atualizar_balance(USER: str, amount: float=0, sit: str=""):
     """Atualizar o saldo dentro do programa ao qual foi chamado.
 
     Args:
-        amount (int, optional): Usado para definir quanto irá aumentar ou diminuir do saldo. Padrão 0 para nem sempre precisar informar.
-        sit (str, optional): Usado para definir se será adicionado ou removido do saldo o valor do amount. Padrão "" para nem sempre precisar informar..
-        sit = "add": Adicionar saldo
-        sit = "rem": Remover saldo
+        USER ( STR ): Usuário atual logado no sistema
+        amount ( INT, OPTIONAL): Usado para definir quanto irá aumentar ou diminuir do saldo. Padrão 0 para nem sempre precisar informar.
+        sit (STR, OPTIONAL): Usado para definir se será adicionado ou removido do saldo o valor do amount. Padrão "" para nem sempre precisar informar..
+    - sit = "add": Adicionar saldo
+    - sit = "rem": Remover saldo
+    - sit = "num": Mostrar saldo atual
 
     Returns:
-        FLOAT/INT: Retornar o valor do balance já definido com aumento, ou redução.
+        FLOAT: Retorna o saldo atual do usuário.
     """
     try:
         user_ref = db.reference(f'users/{USER}/dados/dados_bancarios/dados_monetarios')
@@ -33,11 +35,12 @@ def atualizar_balance(USER, amount=0, sit=""):
 
 
 #!  Mostrar saldo disponivel
-def actual_balance_str(USER):
+def actual_balance_str(USER: str):
     """Formata o saldo atual em string para mostrar corretamente o valor monetário.
-
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
     Returns:
-        STRING: Retorna a frase SALDO DISPONÍVEL junto ao saldo ja formatado para a região pt-BR
+        STR: Retorna a frase SALDO DISPONÍVEL junto ao saldo ja formatado para a região pt-BR
     """
     print()
     import locale

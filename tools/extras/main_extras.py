@@ -11,10 +11,14 @@ from config.main_text import *
 ###################################################################################################
 
 
-def main_extras_menu(USER):
+def main_extras_menu(USER: str):
     """Menu principal de extras
-    > Apenas mostra as opções disponíveis dos extras.
+        Apenas mostra as opções disponíveis dos extras.
+    
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
     """
+
     titulos("MENU DE EXTRAS")
     print(f"""
         {color("[ A ] Loterias.", "lgreen")}

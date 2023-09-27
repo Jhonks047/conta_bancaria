@@ -10,10 +10,14 @@ from config.main_text import *
 ###################################################################################################
 
 
-def menu_lottery_options(USER):
+def menu_lottery_options(USER: str):
     """Menu principal de loterias
-    > Apenas mostra as opções disponíveis das loterias.
+        Apenas mostra as opções disponíveis das loterias.
+    
+    Args:
+        USER ( STR ): Usuário atual logado no sistema
     """
+
     titulos("MENU DAS LOTERIAS")
     print(f"""
         {color("[ A ] Loteria MIXy", "lmagenta")}
@@ -24,4 +28,4 @@ def menu_lottery_options(USER):
     if option == "A":
         tools.extras.loterias.mixy_lottery.main_mixy.mixy_lottery(USER=USER)
     elif option == "X":
-        tools.extras.main_extras.main_extras_menu()
+        tools.extras.main_extras.main_extras_menu(USER=USER)
