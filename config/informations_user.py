@@ -59,3 +59,16 @@ def gerar_email(uid: str):
     sufix = '@mkl.bank'
     email = prefix + sufix
     return email
+
+
+def gerar_chave_pix(prefix: str = "", sit: str = ""):
+    if sit == "nome":
+        itens_permitidos = string.digits+string.ascii_letters
+        suffix = "".join(random.choices(itens_permitidos, k=7))
+        chave_pix_nome = prefix + suffix
+        return chave_pix_nome.lower()
+    elif sit == "aleatorio":
+        itens_permitidos = string.digits+string.ascii_letters+string.ascii_uppercase
+        suffix = "".join(random.choices(itens_permitidos, k=30))
+        chave_pix_aleatorio = suffix
+        return chave_pix_aleatorio

@@ -10,7 +10,7 @@ from config.main_text import *
 
 
 #  Função do depósito
-def deposit():
+def deposito(USER):
     """Depósito bancário
         Essa função efetua o depósito para o usuário, definido o valor pelo qnt_balance que começa com o tipo str para poder trocar
         a ( , ) pelo ( . ) para transformar em float
@@ -30,31 +30,31 @@ def deposit():
     """)
     while True:
         try:
-            qnt_balance = str(input(color("Digite o valor que deseja depositar R$: ", "lwhite"))).replace(",", ".").strip()
-            qnt_balance = float(qnt_balance)
-            if qnt_balance == 0:
+            valor_deposito = str(input(color("Digite o valor que deseja depositar R$: ", "lwhite"))).replace(",", ".").strip()
+            valor_deposito = float(valor_deposito)
+            if valor_deposito == 0:
                 raise ValueError(f"Você não pode depositar {formated_money(value=0)}!")
-            elif qnt_balance < 0:
+            elif valor_deposito < 0:
                 raise ValueError(f"Você não pode depositar um valor negativo!")
         except ValueError as error:
             print(color(f"Erro: {error}","red"))
         else:
             loading(10, "Registrando depósito.")
-            print(f"{'Você irá depositar: '}{formated_money(qnt_balance)}")
+            print(f"{'Você irá depositar: '}{formated_money(valor_deposito)}")
             confirm = options_SN()
             if confirm == "S":
+                atualizar_balance(USER=USER, amount=valor_deposito, sit="add")
+                print(color("Deposito feito com sucesso!","lgreen"))
                 break
             else:
                 loading(20, "Voltando a opção anterior.")
                 continue
-    return qnt_balance
 
 
 #  Função do saque
-def withdraw(USER):
+def transferencia(USER):
     """Saque bancário.
-        Essa função efetua o saque para o usuário, definido o valor pelo qnt_withdraw que começa com o tipo str para poder trocar
-        a ( , ) pelo ( . ) para transformar em float
+        Essa função efetua a transferencia para o usuário, definido o valor pelo <valor_transferencia> que começa com o tipo str para poder trocar ( , ) pelo ( . ) para transformar em float
     Raises:
         ValueError = Saque igual a 0: Impedir que o usuário saque um valor 0.
         ValueError = Saque com valor negativo: Impedir que o usuário saque com um valor negativo.
@@ -69,24 +69,22 @@ def withdraw(USER):
         {color("para outra pessoa ou instituição.", "lcyan")}""")
     while True:
         try:
-            qnt_withdraw = str(input("Digite o valor que deseja transferir R$: ")).replace(",", ".").strip()
-            qnt_withdraw = float(qnt_withdraw)
-            if qnt_withdraw == 0:
-                raise ValueError(f"Você não pode sacar {formated_money(0)}!")
-            elif qnt_withdraw < 0:
-                raise ValueError(f"Você não pode sacar um valor negativo!")
-            elif qnt_withdraw > atualizar_balance(USER, sit="num"):
-                raise ValueError(f"Você não pode sacar um valor acima do seu saldo!")
-            loading(10, "Registrando saque.")
+            valor_transferencia = str(input("Digite o valor que deseja transferir R$: ")).replace(",", ".").strip()
+            valor_transferencia = float(valor_transferencia)
+            if valor_transferencia == 0:
+                raise ValueError(f"Você não pode transferir {formated_money(0)}!")
+            elif valor_transferencia < 0:
+                raise ValueError(f"Você não pode transferir um valor negativo!")
+            elif valor_transferencia > atualizar_balance(USER, sit="num"):
+                raise ValueError(f"Você não pode transferir um valor acima do seu saldo!")
         except ValueError as error:
             print(color(f"Erro: {error}","red"))
             return None
         else:
-            print(f"{'Você irá sacar: '}{formated_money(qnt_withdraw)}")
+            #*  Definir aqui a pessoa que irá receber a transferência
             confirm = options_SN()
             if confirm == "S":
                 break
             else:
                 loading(20, "Voltando a opção anterior.")
                 continue
-    return qnt_withdraw

@@ -170,16 +170,15 @@ def menu_options(USER: str):
         {color("[ A ] Realizar Depósito", "green")}
         {color("[ B ] Relizar Saque < atualmente desabilitado >", "white")}
         {color("[ C ] Abrir menu de Extras", "magenta")}
+        {color("[ D ] Cadastrar chave PIX", "white")}
         
     {color("[ X ] Fechar programa", "lred")}
     """)
-    option = choices("A", "B", "C", "X")
+    option = choices("A", "B", "C", "D", "X")
     
     #  Chama a função do depósito.
     if option == "A":
-        qnt_bal = deposit()
-        atualizar_balance(USER=USER, amount=qnt_bal, sit="add")
-        print(color("Deposito feito com sucesso!","lgreen"))
+        deposito(USER=USER)
     
     #  Chama a função do saque.
     elif option == "Z":
@@ -188,6 +187,47 @@ def menu_options(USER: str):
     #  Chama a função do menu de extras
     elif option == "C":
         tools.extras.main_extras.main_extras_menu(USER=USER)
+    
+    elif option == "D":
+        referencia_chave_pix = db.reference(f'users/{USER}/dados/dados_bancarios/chaves_pix')
+        titulos("CADASTRAR CHAVE PIX", "lwhite")
+        print(f"""
+            Escolha abaixo qual informação gostaria de usar para cadastrar sua chave pix:
+            
+            {color("[ A ] Nome", "lgreen")}
+            {color("[ B ] Número da conta", "lyellow")}
+            {color("[ C ] Gerar chave aleatória", "lblue")}
+        
+        {color("[ X ] Voltar", "lred")}
+        """)
+        option = choices("A", "B", "C", "X")
+        if option == "A":
+            try:
+                chave_pix_nome = gerar_chave_pix(prefix=pegar_informacoes_database(USER=USER, sit="nome"), sit="nome")
+            except Exception as error:
+                print(f"Erro ao criar a chave pix: {error}")
+            else:
+                referencia_chave_pix.update({
+                    'chave_pix_nome': chave_pix_nome
+                })
+        elif option == "B":
+            try:
+                chave_pix_numero_conta = pegar_informacoes_database(USER=USER, sit="conta_bancaria")
+            except Exception as error:
+                print(f"Erro ao criar a chave pix: {error}")
+            else:
+                referencia_chave_pix.update({
+                    'chave_pix_numero_conta': chave_pix_numero_conta
+                })
+        elif option == "C":
+            try:
+                chave_pix_aleatoria = gerar_chave_pix(sit="aleatorio")
+            except Exception as error:
+                print(f"Erro ao criar a chave pix: {error}")
+            else:
+                referencia_chave_pix.update({
+                    'chave_pix_aleatoria': chave_pix_aleatoria
+                })
 
     #  Sair do programa
     elif option == "X":

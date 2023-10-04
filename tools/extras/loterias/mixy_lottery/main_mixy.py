@@ -1,20 +1,19 @@
 ###################################################################################################
 
+#TODO                                  imports Python
+
 from random import randint
 from time import sleep
+
+###################################################################################################
+
+#TODO                           imports da pasta do programa
 
 import main
 import tools.extras.loterias.main_lottery
 from config.get_informations import *
 from config.main_balance import *
 from config.main_text import *
-
-###################################################################################################
-
-#TODO                           imports da pasta do programa
-
-
-
 
 ###################################################################################################
 

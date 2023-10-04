@@ -117,7 +117,7 @@ def pegar_informacoes_database(USER: str, sit: str):
         except Exception as error:
             print(f"Erro ao pegar o número da conta: {error}")
         else:
-            print(f"{color('Número da conta: ', 'lcyan')}{color(conta_bancaria, 'lyellow')}")
+            return conta_bancaria
     elif sit == "nome":
         try:
             users_ref = db.reference(f'users/{USER}/dados/dados_bancarios')
@@ -125,7 +125,7 @@ def pegar_informacoes_database(USER: str, sit: str):
         except Exception as error:
             print(f"Erro ao pegar o nome da conta: {error}")
         else:
-            return f"{color(name, 'lmagenta')}"
+            return name
     elif sit == "bitcoins":
         try:
             users_ref = db.reference(f'users/{USER}/dados/dados_investimento/criptomoedas')
